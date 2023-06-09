@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "compressium:netherite_5" },
+    "R": { "item": "compressium:granite_5" },
+    "@": { "item": "centrifugetiersreproduced:cosmic_centrifuge" }
+  },
+  "result": {
+    "item": "centrifugetiersreproduced:creative_centrifuge",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "compressium"
+    }
+  ]
+}

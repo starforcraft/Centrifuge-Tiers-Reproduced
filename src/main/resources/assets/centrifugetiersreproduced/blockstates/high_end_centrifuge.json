@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "running=false": {
+            "model": "centrifugetiersreproduced:block/high_end_idle"
+        },
+        "running=true": {
+            "model": "centrifugetiersreproduced:block/high_end_running"
+        }
+    }
+}

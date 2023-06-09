@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "allthecompressed:netherite_block_5x" },
+    "R": { "item": "allthecompressed:granite_block_5x" },
+    "@": { "item": "centrifugetiersreproduced:cosmic_centrifuge" }
+  },
+  "result": {
+    "item": "centrifugetiersreproduced:creative_centrifuge",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "compressium"
+          }
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "allthecompressed"
+        }
+      ]
+    }
+  ]
+}

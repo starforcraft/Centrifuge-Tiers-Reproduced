@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "compressium:diamond_3" },
+    "R": { "item": "productivebees:inactive_dragon_egg" },
+    "@": { "item": "productivebees:heated_centrifuge" }
+  },
+  "result": {
+    "item": "centrifugetiersreproduced:high_end_centrifuge",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "compressium"
+    }
+  ]
+}

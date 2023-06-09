@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "centrifugetiersreproduced:high_end_centrifuge"
+                }
+            ]
+        }
+    ]
+}

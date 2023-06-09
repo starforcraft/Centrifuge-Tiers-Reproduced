@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "running=false": {
+            "model": "centrifugetiersreproduced:block/cosmic_idle"
+        },
+        "running=true": {
+            "model": "centrifugetiersreproduced:block/cosmic_running"
+        }
+    }
+}

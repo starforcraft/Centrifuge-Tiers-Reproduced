@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "allthecompressed:diamond_block_3x" },
+    "R": { "item": "productivebees:inactive_dragon_egg" },
+    "@": { "item": "productivebees:heated_centrifuge" }
+  },
+  "result": {
+    "item": "centrifugetiersreproduced:high_end_centrifuge",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "compressium"
+          }
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "allthecompressed"
+        }
+      ]
+    }
+  ]
+}

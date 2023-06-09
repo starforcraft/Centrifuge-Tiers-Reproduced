@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "R@R",
+    "IRI"
+  ],
+  "key": {
+    "I": { "item": "allthecompressed:obsidian_block_4x" },
+    "R": { "item": "allthecompressed:redstone_block_4x" },
+    "@": { "item": "centrifugetiersreproduced:nuclear_centrifuge" }
+  },
+  "result": {
+    "item": "centrifugetiersreproduced:cosmic_centrifuge",
+    "count": 1
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:mod_loaded",
+            "modid": "compressium"
+          }
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "allthecompressed"
+        }
+      ]
+    }
+  ]
+}

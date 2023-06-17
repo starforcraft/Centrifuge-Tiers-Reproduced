@@ -1,11 +1,13 @@
-package com.Ultramega.CentrifugeTiersReproduced.gui;
+package com.ultramega.centrifugetiersreproduced.gui;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
-import com.Ultramega.CentrifugeTiersReproduced.config.CentrifugeTiersReproducedConfig;
-import com.Ultramega.CentrifugeTiersReproduced.container.TieredCentrifugeContainer;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.config.CentrifugeTiersReproducedConfig;
+import com.ultramega.centrifugetiersreproduced.container.TieredCentrifugeContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import cy.jdkdigital.productivebees.container.CentrifugeContainer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -30,18 +32,18 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
     }
 
     @Override
-    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY);
+    public void render(@Nonnull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(guiGraphics);
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderLabels(PoseStack matrixStack, int mouseX, int mouseY) {
-        this.font.draw(matrixStack, this.title, -5f, 6.0F, 4210752);
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(this.font, this.title, -5, 6, 4210752);
 
         int inventoryY = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 78 : 96;
-        this.font.draw(matrixStack, this.playerInventoryTitle, -5f, (float) (this.getYSize() - inventoryY + 2), 4210752);
+        guiGraphics.drawString(this.font, this.playerInventoryTitle, -5, this.getYSize() - inventoryY + 2, 4210752);
 
         this.menu.tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(handler -> {
             FluidStack fluidStack = handler.getFluidInTank(0);
@@ -59,7 +61,7 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
                     tooltipList.add(Component.translatable("productivebees.hive.tooltip.empty").getVisualOrderText());
                 }
 
-                renderTooltip(matrixStack, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
+                guiGraphics.renderTooltip(this.font, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
             }
         });
 
@@ -72,51 +74,48 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
                     List<FormattedCharSequence> tooltipList = new ArrayList<>();
                     tooltipList.add(Component.translatable("productivebees.screen.energy_level", energyAmount + "FE").getVisualOrderText());
 
-                    renderTooltip(matrixStack, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
+                    guiGraphics.renderTooltip(this.font, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
                 }
             });
         }
     }
 
     @Override
-    protected void renderBg(@Nonnull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        RenderSystem.setShaderTexture(0, new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/" + getMenu().tileEntity.tier.getName() + "_centrifuge.png"));
+    protected void renderBg(@Nonnull GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+        ResourceLocation GUI = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/" + getMenu().tileEntity.tier.getName() + "_centrifuge.png");
 
         // Draw main screen
         int xOffset = tier == CentrifugeTiers.CREATIVE ? 0 : 26;
         int yOffset = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 18 : 0;
-        blit(matrixStack, this.getGuiLeft() - 13, this.getGuiTop(), 0, 0, this.getXSize() + xOffset, this.getYSize() + yOffset);
+        guiGraphics.blit(GUI, this.getGuiLeft() - 13, this.getGuiTop(), 0, 0, this.getXSize() + xOffset, this.getYSize() + yOffset);
 
         // Draw progress
         int arrowX = tier == CentrifugeTiers.CREATIVE ? 176 : 202;
         int arrowY = tier == CentrifugeTiers.COSMIC ? 71 : 52;
 
-        int progress = (int) (this.menu.tileEntity.recipeProgress * (24 / (float) this.menu.tileEntity.getProcessingTime()));
-        blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 17, arrowX, arrowY, progress + 1, 16);
+        int progress = (int) (this.menu.tileEntity.recipeProgress * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+        guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 17, arrowX, arrowY, progress + 1, 16);
 
-        int progress2 = (int) (this.menu.tileEntity.recipeProgress2 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
-        blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 53, arrowX, arrowY, progress2 + 1, 16);
+        int progress2 = (int) (this.menu.tileEntity.recipeProgress2 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+        guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 53, arrowX, arrowY, progress2 + 1, 16);
 
         if(tier.getInputSlotAmount() > 2) {
-            int progress3 = (int) (this.menu.tileEntity.recipeProgress3 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
-            blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 35, arrowX, arrowY, progress3 + 1, 16);
+            int progress3 = (int) (this.menu.tileEntity.recipeProgress3 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+            guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 35, arrowX, arrowY, progress3 + 1, 16);
 
             if(tier.getInputSlotAmount() > 3) {
-                int progress4 = (int) (this.menu.tileEntity.recipeProgress4 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
-                blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 71, arrowX, arrowY, progress4 + 1, 16);
+                int progress4 = (int) (this.menu.tileEntity.recipeProgress4 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+                guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 71, arrowX, arrowY, progress4 + 1, 16);
             }
         }
 
         // Draw energy level
         int energySizeY = tier == CentrifugeTiers.COSMIC ? 70 : 52;
-        blit(matrixStack, getGuiLeft() - 5, getGuiTop() + 17, 206, 0, 4, energySizeY);
+        guiGraphics.blit(GUI, getGuiLeft() - 5, getGuiTop() + 17, 206, 0, 4, energySizeY);
         this.menu.tileEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
             int energyAmount = handler.getEnergyStored();
             double energyLevel = energyAmount * (energySizeY / (double) handler.getMaxEnergyStored());
-            blit(matrixStack, getGuiLeft() - 5, getGuiTop() + 17, 8, 17, 4, (int)(energySizeY - energyLevel));
+            guiGraphics.blit(GUI, getGuiLeft() - 5, getGuiTop() + 17, 8, 17, 4, (int)(energySizeY - energyLevel));
         });
 
         // Draw fluid tank
@@ -124,15 +123,10 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
             FluidStack fluidStack = handler.getFluidInTank(0);
 
             if (fluidStack.getAmount() > 0) {
-                int fluidLevel = (int) (fluidStack.getAmount() * (52 / (float)(CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_FLUID_CAPACITY.get())));
-
-                FluidContainerUtil.setColors(fluidStack);
-
                 int fluidX = tier == CentrifugeTiers.CREATIVE ? 145 : 127;
                 int fluidY = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 87 : 69;
-                FluidContainerUtil.drawTiledSprite(this.getGuiLeft() + fluidX, this.getGuiTop() + fluidY, 0, 4, fluidLevel, FluidContainerUtil.getSprite(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture()), 16, 16, getBlitOffset());
 
-                FluidContainerUtil.resetColor();
+                FluidContainerUtil.renderFluidTank(guiGraphics, this, fluidStack, handler.getTankCapacity(0), fluidX, fluidY, 4, 52, 0);
             }
         });
     }

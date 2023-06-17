@@ -1,8 +1,8 @@
-package com.Ultramega.CentrifugeTiersReproduced;
+package com.ultramega.centrifugetiersreproduced;
 
-import com.Ultramega.CentrifugeTiersReproduced.config.Config;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ClientEventHandler;
-import com.Ultramega.CentrifugeTiersReproduced.registry.RegistryHandler;
+import com.ultramega.centrifugetiersreproduced.config.Config;
+import com.ultramega.centrifugetiersreproduced.registry.ClientEventHandler;
+import com.ultramega.centrifugetiersreproduced.registry.RegistryHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;

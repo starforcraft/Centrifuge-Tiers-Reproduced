@@ -1,10 +1,10 @@
-package com.Ultramega.CentrifugeTiersReproduced.container;
+package com.ultramega.centrifugetiersreproduced.container;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelper;
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.TieredCentrifugeBlockEntity;
-import com.Ultramega.CentrifugeTiersReproduced.blocks.TieredCentrifuge;
-import net.minecraft.core.Registry;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
+import com.ultramega.centrifugetiersreproduced.blockentity.InventoryHandlerHelper;
+import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
+import com.ultramega.centrifugetiersreproduced.blocks.TieredCentrifuge;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,12 +14,9 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -54,7 +51,7 @@ public class TieredCentrifugeContainer extends AbstractContainer {
                         tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(fluidHandler -> {
                             FluidStack fluid = fluidHandler.getFluidInTank(0);
                             if (fluid.isEmpty()) {
-                                fluidHandler.fill(new FluidStack(Registry.FLUID.byId(tileEntity.fluidId), value), IFluidHandler.FluidAction.EXECUTE);
+                                fluidHandler.fill(new FluidStack(BuiltInRegistries.FLUID.byId(tileEntity.fluidId), value), IFluidHandler.FluidAction.EXECUTE);
                             }
                             else {
                                 fluid.setAmount(value);
@@ -164,7 +161,7 @@ public class TieredCentrifugeContainer extends AbstractContainer {
     private static TieredCentrifugeBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
         Objects.requireNonNull(data, "data cannot be null!");
-        final BlockEntity tileAtPos = playerInventory.player.level.getBlockEntity(data.readBlockPos());
+        final BlockEntity tileAtPos = playerInventory.player.level().getBlockEntity(data.readBlockPos());
         if (tileAtPos instanceof TieredCentrifugeBlockEntity tile) {
             return tile;
         }

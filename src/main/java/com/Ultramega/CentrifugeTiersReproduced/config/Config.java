@@ -1,8 +1,8 @@
-package com.Ultramega.CentrifugeTiersReproduced.config;
+package com.ultramega.centrifugetiersreproduced.config;
 
 import java.io.File;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 

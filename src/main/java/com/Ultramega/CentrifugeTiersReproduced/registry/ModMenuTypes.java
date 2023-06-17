@@ -1,7 +1,7 @@
-package com.Ultramega.CentrifugeTiersReproduced.registry;
+package com.ultramega.centrifugetiersreproduced.registry;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
-import com.Ultramega.CentrifugeTiersReproduced.container.TieredCentrifugeContainer;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.container.TieredCentrifugeContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;

@@ -1,7 +1,7 @@
-package com.Ultramega.CentrifugeTiersReproduced.registry;
+package com.ultramega.centrifugetiersreproduced.registry;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.TieredCentrifugeBlockEntity;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

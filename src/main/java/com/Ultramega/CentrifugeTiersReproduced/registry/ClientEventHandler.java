@@ -1,6 +1,6 @@
-package com.Ultramega.CentrifugeTiersReproduced.registry;
+package com.ultramega.centrifugetiersreproduced.registry;
 
-import com.Ultramega.CentrifugeTiersReproduced.gui.TieredCentrifugeScreen;
+import com.ultramega.centrifugetiersreproduced.gui.TieredCentrifugeScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

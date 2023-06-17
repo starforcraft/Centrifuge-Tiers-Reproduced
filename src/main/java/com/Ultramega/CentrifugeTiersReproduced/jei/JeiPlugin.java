@@ -1,8 +1,8 @@
-package com.Ultramega.CentrifugeTiersReproduced.jei;
+package com.ultramega.centrifugetiersreproduced.jei;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
-import com.Ultramega.CentrifugeTiersReproduced.gui.TieredCentrifugeScreen;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModBlocks;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.gui.TieredCentrifugeScreen;
+import com.ultramega.centrifugetiersreproduced.registry.ModBlocks;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;

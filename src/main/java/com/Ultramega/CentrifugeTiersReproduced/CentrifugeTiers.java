@@ -1,6 +1,6 @@
-package com.Ultramega.CentrifugeTiersReproduced;
+package com.ultramega.centrifugetiersreproduced;
 
-import com.Ultramega.CentrifugeTiersReproduced.config.CentrifugeTiersReproducedConfig;
+import com.ultramega.centrifugetiersreproduced.config.CentrifugeTiersReproducedConfig;
 
 public enum CentrifugeTiers {
     HIGH_END("high_end", CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_SPEED.get(), CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_ITEM_MAX_STACK_SIZE.get(), CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_OUTPUT_MULTIPLIER.get(), CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_ENERGY_CAPACITY.get(), CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_FLUID_CAPACITY.get(), 2),

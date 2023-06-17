@@ -1,12 +1,14 @@
-package com.Ultramega.CentrifugeTiersReproduced.recipe;
+package com.ultramega.centrifugetiersreproduced.recipe;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiersReproduced;
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelper;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
+import com.ultramega.centrifugetiersreproduced.blockentity.InventoryHandlerHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import cy.jdkdigital.productivebees.ProductiveBeesConfig;
 import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
 import cy.jdkdigital.productivebees.init.ModRecipeTypes;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -30,12 +32,18 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
     public final ResourceLocation id;
     public final Ingredient ingredient;
     public final Map<String, Integer> fluidOutput;
+    private final Integer processingTime;
 
-    public TieredCentrifugeRecipe(ResourceLocation id, Ingredient ingredient, Map<Ingredient, IntArrayTag> itemOutput, Map<String, Integer> fluidOutput) {
-        super(id, ingredient, itemOutput, fluidOutput);
+    public TieredCentrifugeRecipe(ResourceLocation id, Ingredient ingredient, Map<Ingredient, IntArrayTag> itemOutput, Map<String, Integer> fluidOutput, int processingTime) {
+        super(id, ingredient, itemOutput, fluidOutput, processingTime);
         this.id = id;
         this.ingredient = ingredient;
         this.fluidOutput = fluidOutput;
+        this.processingTime = processingTime;
+    }
+
+    public int getProcessingTime() {
+        return this.processingTime > 0 ? this.processingTime : ProductiveBeesConfig.GENERAL.centrifugeProcessingTime.get();
     }
 
     @Override
@@ -80,7 +88,7 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
 
     @Nonnull
     @Override
-    public ItemStack assemble(Container inv) {
+    public ItemStack assemble(Container inv, RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -91,7 +99,7 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
 
     @Nonnull
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
         return ItemStack.EMPTY;
     }
 
@@ -176,7 +184,8 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
                 }
             });
 
-            return this.factory.create(id, ingredient, itemOutputs, fluidOutputs);
+            int processingTime = json.has("processingTime") ? json.get("processingTime").getAsInt() : -1;
+            return this.factory.create(id, ingredient, itemOutputs, fluidOutputs, processingTime);
         }
 
         @Override
@@ -194,7 +203,7 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
                         i -> fluidOutput.put(buffer.readUtf(), buffer.readInt())
                 );
 
-                return this.factory.create(id, ingredient, itemOutput, fluidOutput);
+                return this.factory.create(id, ingredient, itemOutput, fluidOutput, buffer.readInt());
             } catch (Exception e) {
                 CentrifugeTiersReproduced.LOGGER.error("Error reading centrifuge recipe from packet. " + id, e);
                 throw e;
@@ -219,7 +228,7 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
                     buffer.writeUtf(key);
                     buffer.writeInt(value);
                 });
-
+                buffer.writeInt(recipe.getProcessingTime());
             } catch (Exception e) {
                 CentrifugeTiersReproduced.LOGGER.error("Error writing centrifuge recipe to packet. " + recipe.getId(), e);
                 throw e;
@@ -227,7 +236,7 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
         }
 
         public interface IRecipeFactory<T extends TieredCentrifugeRecipe> {
-            T create(ResourceLocation id, Ingredient input, Map<Ingredient, IntArrayTag> itemOutput, Map<String, Integer> fluidOutput);
+            T create(ResourceLocation id, Ingredient input, Map<Ingredient, IntArrayTag> itemOutput, Map<String, Integer> fluidOutput, Integer processingTime);
         }
     }
 }

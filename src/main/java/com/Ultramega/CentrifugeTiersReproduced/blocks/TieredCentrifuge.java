@@ -1,8 +1,8 @@
-package com.Ultramega.CentrifugeTiersReproduced.blocks;
+package com.ultramega.centrifugetiersreproduced.blocks;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.TieredCentrifugeBlockEntity;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModBlockEntityTypes;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
+import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
+import com.ultramega.centrifugetiersreproduced.registry.ModBlockEntityTypes;
 
 import cy.jdkdigital.productivebees.common.block.PoweredCentrifuge;
 import net.minecraft.core.BlockPos;

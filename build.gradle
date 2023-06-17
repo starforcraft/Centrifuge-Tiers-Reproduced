@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -25,7 +25,7 @@ repositories {
 }
 
 version = "${mod_version}"
-group = "com.Ultramega.CentrifugeTiersReproduced"
+group = "com.ultramega.centrifugetiersreproduced"
 archivesBaseName = "${modid}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -95,18 +95,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:productivebees-377897:4566382")
-    runtimeOnly fg.deobf("curse.maven:compressium-342929:3872847")
-    runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:4068231")
+    implementation fg.deobf("curse.maven:productivebees-377897:4588445")
+    runtimeOnly fg.deobf("curse.maven:compressium-342929:4584753")
+    //runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:4068231")
 
-    implementation fg.deobf("curse.maven:top-245211:3965693")
+    implementation fg.deobf("curse.maven:top-245211:4579432")
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
-    runtimeOnly fg.deobf('curse.maven:powah-633483:4525233')
-    runtimeOnly fg.deobf('curse.maven:cloth-348521:3972423')
-    runtimeOnly fg.deobf('curse.maven:architectury-419699:4555749')
+    //runtimeOnly fg.deobf('curse.maven:powah-633483:4525233')
+    runtimeOnly fg.deobf('curse.maven:cloth-348521:4573055')
+    runtimeOnly fg.deobf('curse.maven:architectury-419699:4581905')
 }
 
 jar {

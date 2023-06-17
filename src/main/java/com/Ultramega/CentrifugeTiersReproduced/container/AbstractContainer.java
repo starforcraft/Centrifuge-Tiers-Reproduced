@@ -1,6 +1,6 @@
-package com.Ultramega.CentrifugeTiersReproduced.container;
+package com.ultramega.centrifugetiersreproduced.container;
 
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelper;
+import com.ultramega.centrifugetiersreproduced.blockentity.InventoryHandlerHelper;
 import cy.jdkdigital.productivebees.common.block.entity.UpgradeableBlockEntity;
 import cy.jdkdigital.productivebees.common.item.UpgradeItem;
 import net.minecraft.world.Container;

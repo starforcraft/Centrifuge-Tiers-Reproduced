@@ -1,6 +1,6 @@
-package com.Ultramega.CentrifugeTiersReproduced.container;
+package com.ultramega.centrifugetiersreproduced.container;
 
-import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelper;
+import com.ultramega.centrifugetiersreproduced.blockentity.InventoryHandlerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;

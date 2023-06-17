@@ -1,4 +1,4 @@
-package com.Ultramega.CentrifugeTiersReproduced.config;
+package com.ultramega.centrifugetiersreproduced.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

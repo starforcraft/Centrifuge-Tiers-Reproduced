@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "centrifugetiersreproduced:high_end_centrifuge",
+    "centrifugetiersreproduced:nuclear_centrifuge",
+    "centrifugetiersreproduced:cosmic_centrifuge",
+    "centrifugetiersreproduced:creative_centrifuge"
+  ]
+}

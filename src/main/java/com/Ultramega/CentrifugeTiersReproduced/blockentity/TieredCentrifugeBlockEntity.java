@@ -1,12 +1,12 @@
-package com.Ultramega.CentrifugeTiersReproduced.blockentity;
+package com.ultramega.centrifugetiersreproduced.blockentity;
 
-import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
-import com.Ultramega.CentrifugeTiersReproduced.blocks.TieredCentrifuge;
-import com.Ultramega.CentrifugeTiersReproduced.container.TieredCentrifugeContainer;
-import com.Ultramega.CentrifugeTiersReproduced.recipe.TieredCentrifugeRecipe;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModBlocks;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModMenuTypes;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModBlockEntityTypes;
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
+import com.ultramega.centrifugetiersreproduced.blocks.TieredCentrifuge;
+import com.ultramega.centrifugetiersreproduced.container.TieredCentrifugeContainer;
+import com.ultramega.centrifugetiersreproduced.recipe.TieredCentrifugeRecipe;
+import com.ultramega.centrifugetiersreproduced.registry.ModBlocks;
+import com.ultramega.centrifugetiersreproduced.registry.ModMenuTypes;
+import com.ultramega.centrifugetiersreproduced.registry.ModBlockEntityTypes;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import cy.jdkdigital.productivebees.ProductiveBeesConfig;
@@ -18,6 +18,7 @@ import cy.jdkdigital.productivebees.common.item.Gene;
 import cy.jdkdigital.productivebees.common.item.GeneBottle;
 import cy.jdkdigital.productivebees.common.item.HoneyTreat;
 import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
+import cy.jdkdigital.productivebees.common.recipe.TimedRecipeInterface;
 import cy.jdkdigital.productivebees.init.ModItems;
 import cy.jdkdigital.productivebees.init.ModRecipeTypes;
 import cy.jdkdigital.productivebees.init.ModTags;
@@ -26,6 +27,7 @@ import cy.jdkdigital.productivebees.util.BeeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -127,7 +129,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
         @Override
         protected void onContentsChanged() {
             super.onContentsChanged();
-            TieredCentrifugeBlockEntity.this.fluidId = Registry.FLUID.getId(getFluid().getFluid());
+            TieredCentrifugeBlockEntity.this.fluidId = BuiltInRegistries.FLUID.getId(getFluid().getFluid());
             TieredCentrifugeBlockEntity.this.setChanged();
         }
     });
@@ -156,7 +158,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                         ItemStack invItem = invHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[i]);
                         if (invItem.getItem().equals(ModItems.GENE_BOTTLE.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress >= totalTime) {
                                 blockEntity.completeGeneProcessing(invHandler, i, level.random);
@@ -165,7 +167,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             }
                         } else if (invItem.getItem().equals(ModItems.HONEY_TREAT.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress >= totalTime) {
                                 blockEntity.completeTreatProcessing(invHandler, i);
@@ -176,7 +178,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             CentrifugeRecipe recipe = blockEntity.getRecipe(invHandler, i);
                             if (blockEntity.canProcessRecipe(recipe, invHandler)) {
                                 level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                                int totalTime = blockEntity.getProcessingTime();
+                                int totalTime = blockEntity.getProcessingTime(recipe);
 
                                 if (++blockEntity.recipeProgress >= totalTime) {
                                     blockEntity.completeRecipeProcessing(recipe, invHandler, i, level.random);
@@ -200,7 +202,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                         ItemStack invItem = invHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[i]);
                         if (invItem.getItem().equals(ModItems.GENE_BOTTLE.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress2 >= totalTime) {
                                 blockEntity.completeGeneProcessing(invHandler, i, level.random);
@@ -209,7 +211,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             }
                         } else if (invItem.getItem().equals(ModItems.HONEY_TREAT.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress2 >= totalTime) {
                                 blockEntity.completeTreatProcessing(invHandler, i);
@@ -220,7 +222,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             CentrifugeRecipe recipe = blockEntity.getRecipe(invHandler, i);
                             if (blockEntity.canProcessRecipe(recipe, invHandler)) {
                                 level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                                int totalTime = blockEntity.getProcessingTime();
+                                int totalTime = blockEntity.getProcessingTime(recipe);
 
                                 if (++blockEntity.recipeProgress2 >= totalTime) {
                                     blockEntity.completeRecipeProcessing(recipe, invHandler, i, level.random);
@@ -244,7 +246,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                         ItemStack invItem = invHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[i]);
                         if (invItem.getItem().equals(ModItems.GENE_BOTTLE.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress3 >= totalTime) {
                                 blockEntity.completeGeneProcessing(invHandler, i, level.random);
@@ -253,7 +255,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             }
                         } else if (invItem.getItem().equals(ModItems.HONEY_TREAT.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress3 >= totalTime) {
                                 blockEntity.completeTreatProcessing(invHandler, i);
@@ -264,7 +266,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             CentrifugeRecipe recipe = blockEntity.getRecipe(invHandler, i);
                             if (blockEntity.canProcessRecipe(recipe, invHandler)) {
                                 level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                                int totalTime = blockEntity.getProcessingTime();
+                                int totalTime = blockEntity.getProcessingTime(recipe);
 
                                 if (++blockEntity.recipeProgress3 >= totalTime) {
                                     blockEntity.completeRecipeProcessing(recipe, invHandler, i, level.random);
@@ -288,7 +290,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                         ItemStack invItem = invHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[i]);
                         if (invItem.getItem().equals(ModItems.GENE_BOTTLE.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress4 >= totalTime) {
                                 blockEntity.completeGeneProcessing(invHandler, i, level.random);
@@ -297,7 +299,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             }
                         } else if (invItem.getItem().equals(ModItems.HONEY_TREAT.get())) {
                             level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                            int totalTime = blockEntity.getProcessingTime();
+                            int totalTime = blockEntity.getProcessingTime(null);
 
                             if (++blockEntity.recipeProgress4 >= totalTime) {
                                 blockEntity.completeTreatProcessing(invHandler, i);
@@ -308,7 +310,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                             CentrifugeRecipe recipe = blockEntity.getRecipe(invHandler, i);
                             if (blockEntity.canProcessRecipe(recipe, invHandler)) {
                                 level.setBlockAndUpdate(pos, state.setValue(TieredCentrifuge.RUNNING, true));
-                                int totalTime = blockEntity.getProcessingTime();
+                                int totalTime = blockEntity.getProcessingTime(recipe);
 
                                 if (++blockEntity.recipeProgress4 >= totalTime) {
                                     blockEntity.completeRecipeProcessing(recipe, invHandler, i, level.random);
@@ -436,9 +438,9 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
         return Math.max(1, timeUpgradeModifier) * 5;
     }
 
-    public int getProcessingTime() {
+    public int getProcessingTime(TimedRecipeInterface recipe) {
         if(tier != CentrifugeTiers.CREATIVE) {
-            return (int) (ProductiveBeesConfig.GENERAL.centrifugePoweredProcessingTime.get() * getProcessingTimeModifier() / tier.getSpeed());
+            return (int) ((recipe != null ? recipe.getProcessingTime() : 300) * getProcessingTimeModifier() / tier.getSpeed());
         } else {
             return 0;
         }
@@ -503,7 +505,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                 return currentRecipe;
             }
 
-            currentRecipe = BeeHelper.getCentrifugeRecipe(level.getRecipeManager(), inputHandler);
+            currentRecipe = BeeHelper.getCentrifugeRecipe(level, inputHandler);
 
             Map<ResourceLocation, CentrifugeRecipe> allRecipes = level.getRecipeManager().byType(ModRecipeTypes.CENTRIFUGE_TYPE.get());
             Container inv = new RecipeWrapper(inputHandler);
@@ -526,13 +528,13 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                 return currentRecipe2;
             }
 
-            currentRecipe2 = BeeHelper.getCentrifugeRecipe(level.getRecipeManager(), inputHandler);
+            currentRecipe2 = BeeHelper.getCentrifugeRecipe(level, inputHandler);
 
             Map<ResourceLocation, CentrifugeRecipe> allRecipes = level.getRecipeManager().byType(ModRecipeTypes.CENTRIFUGE_TYPE.get());
             Container inv = new RecipeWrapper(inputHandler);
             for (Map.Entry<ResourceLocation, CentrifugeRecipe> entry : allRecipes.entrySet()) {
                 CentrifugeRecipe recipe = entry.getValue();
-                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput);
+                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput, recipe.getProcessingTime());
                 if (recipe2.matches(inv, level, index)) {
                     currentRecipe2 = recipe;
                     break;
@@ -550,13 +552,13 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                 return currentRecipe3;
             }
 
-            currentRecipe3 = BeeHelper.getCentrifugeRecipe(level.getRecipeManager(), inputHandler);
+            currentRecipe3 = BeeHelper.getCentrifugeRecipe(level, inputHandler);
 
             Map<ResourceLocation, CentrifugeRecipe> allRecipes = level.getRecipeManager().byType(ModRecipeTypes.CENTRIFUGE_TYPE.get());
             Container inv = new RecipeWrapper(inputHandler);
             for (Map.Entry<ResourceLocation, CentrifugeRecipe> entry : allRecipes.entrySet()) {
                 CentrifugeRecipe recipe = entry.getValue();
-                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput);
+                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput, recipe.getProcessingTime());
                 if (recipe2.matches(inv, level, index)) {
                     currentRecipe3 = recipe;
                     break;
@@ -574,13 +576,13 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
                 return currentRecipe4;
             }
 
-            currentRecipe4 = BeeHelper.getCentrifugeRecipe(level.getRecipeManager(), inputHandler);
+            currentRecipe4 = BeeHelper.getCentrifugeRecipe(level, inputHandler);
 
             Map<ResourceLocation, CentrifugeRecipe> allRecipes = level.getRecipeManager().byType(ModRecipeTypes.CENTRIFUGE_TYPE.get());
             Container inv = new RecipeWrapper(inputHandler);
             for (Map.Entry<ResourceLocation, CentrifugeRecipe> entry : allRecipes.entrySet()) {
                 CentrifugeRecipe recipe = entry.getValue();
-                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput);
+                TieredCentrifugeRecipe recipe2 = new TieredCentrifugeRecipe(recipe.id, recipe.ingredient, recipe.itemOutput, recipe.fluidOutput, recipe.getProcessingTime());
                 if (recipe2.matches(inv, level, index)) {
                     currentRecipe4 = recipe;
                     break;
@@ -693,7 +695,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
 
         // set fluid ID for screens
         Fluid fluid = fluidInventory.map(fluidHandler -> fluidHandler.getFluidInTank(0).getFluid()).orElse(Fluids.EMPTY);
-        fluidId = Registry.FLUID.getId(fluid);
+        fluidId = BuiltInRegistries.FLUID.getId(fluid);
 
         inventoryHandler.ifPresent(invHandler -> {
             for(int i = 0; i < InventoryHandlerHelper.OUTPUT_SLOTS.length; i++) {

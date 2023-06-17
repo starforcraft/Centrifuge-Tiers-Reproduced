@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 license="MIT"
 issueTrackerURL="https://github.com/starforcraft/Centrifuge-Tiers-Reproduced/issues/new/choose"
 [[mods]]
@@ -22,13 +22,13 @@ description="This mod adds tiers to the centrifuges from Productive Bees."
 [[dependencies.centrifugetiersreproduced]]
     modId="forge"
     mandatory=true
-    versionRange="[40.1.79,)"
+    versionRange="[43.0.0,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.centrifugetiersreproduced]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,)"
+    versionRange="[1.19.2,)"
     ordering="NONE"
     side="BOTH"

@@ -9,13 +9,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         int inventoryY = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 78 : 96;
         this.font.draw(matrixStack, this.playerInventoryTitle, -5f, (float) (this.getYSize() - inventoryY + 2), 4210752);
 
-        this.menu.tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(handler -> {
+        this.menu.tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(handler -> {
             FluidStack fluidStack = handler.getFluidInTank(0);
 
             // Fluid level tooltip
@@ -54,10 +53,10 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
                 List<FormattedCharSequence> tooltipList = new ArrayList<>();
 
                 if (fluidStack.getAmount() > 0) {
-                    tooltipList.add(new TranslatableComponent("productivebees.screen.fluid_level", new TranslatableComponent(fluidStack.getTranslationKey()).getString(), fluidStack.getAmount() + "mB").getVisualOrderText());
+                    tooltipList.add(Component.translatable("productivebees.screen.fluid_level", Component.translatable(fluidStack.getTranslationKey()).getString(), fluidStack.getAmount() + "mB").getVisualOrderText());
                 }
                 else {
-                    tooltipList.add(new TranslatableComponent("productivebees.hive.tooltip.empty").getVisualOrderText());
+                    tooltipList.add(Component.translatable("productivebees.hive.tooltip.empty").getVisualOrderText());
                 }
 
                 renderTooltip(matrixStack, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
@@ -65,13 +64,13 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         });
 
         if(tier != CentrifugeTiers.CREATIVE) {
-            this.menu.tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(handler -> {
+            this.menu.tileEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
                 int energyAmount = handler.getEnergyStored();
 
                 // Energy level tooltip
                 if (isHovering(-5, 16, 6, tier == CentrifugeTiers.COSMIC ? 72 : 54, mouseX, mouseY)) {
                     List<FormattedCharSequence> tooltipList = new ArrayList<>();
-                    tooltipList.add(new TranslatableComponent("productivebees.screen.energy_level", energyAmount + "FE").getVisualOrderText());
+                    tooltipList.add(Component.translatable("productivebees.screen.energy_level", energyAmount + "FE").getVisualOrderText());
 
                     renderTooltip(matrixStack, tooltipList, mouseX - getGuiLeft(), mouseY - getGuiTop());
                 }
@@ -114,14 +113,14 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         // Draw energy level
         int energySizeY = tier == CentrifugeTiers.COSMIC ? 70 : 52;
         blit(matrixStack, getGuiLeft() - 5, getGuiTop() + 17, 206, 0, 4, energySizeY);
-        this.menu.tileEntity.getCapability(CapabilityEnergy.ENERGY).ifPresent(handler -> {
+        this.menu.tileEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
             int energyAmount = handler.getEnergyStored();
             double energyLevel = energyAmount * (energySizeY / (double) handler.getMaxEnergyStored());
             blit(matrixStack, getGuiLeft() - 5, getGuiTop() + 17, 8, 17, 4, (int)(energySizeY - energyLevel));
         });
 
         // Draw fluid tank
-        this.menu.tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY).ifPresent(handler -> {
+        this.menu.tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(handler -> {
             FluidStack fluidStack = handler.getFluidInTank(0);
 
             if (fluidStack.getAmount() > 0) {
@@ -131,7 +130,7 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
 
                 int fluidX = tier == CentrifugeTiers.CREATIVE ? 145 : 127;
                 int fluidY = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 87 : 69;
-                FluidContainerUtil.drawTiledSprite(this.getGuiLeft() + fluidX, this.getGuiTop() + fluidY, 0, 4, fluidLevel, FluidContainerUtil.getSprite(fluidStack.getFluid().getAttributes().getStillTexture()), 16, 16, getBlitOffset());
+                FluidContainerUtil.drawTiledSprite(this.getGuiLeft() + fluidX, this.getGuiTop() + fluidY, 0, 4, fluidLevel, FluidContainerUtil.getSprite(IClientFluidTypeExtensions.of(fluidStack.getFluid()).getStillTexture()), 16, 16, getBlitOffset());
 
                 FluidContainerUtil.resetColor();
             }

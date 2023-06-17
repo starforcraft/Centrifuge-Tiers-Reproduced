@@ -11,9 +11,9 @@ public class ClientEventHandler {
     }
 
     private static void doClientStuff(final FMLClientSetupEvent event) {
-        MenuScreens.register(ModContainerTypes.HIGH_END_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
-        MenuScreens.register(ModContainerTypes.NUCLEAR_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
-        MenuScreens.register(ModContainerTypes.COSMIC_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
-        MenuScreens.register(ModContainerTypes.CREATIVE_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
+        MenuScreens.register(ModMenuTypes.HIGH_END_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
+        MenuScreens.register(ModMenuTypes.NUCLEAR_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
+        MenuScreens.register(ModMenuTypes.COSMIC_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
+        MenuScreens.register(ModMenuTypes.CREATIVE_CENTRIFUGE.get(), TieredCentrifugeScreen::new);
     }
 }

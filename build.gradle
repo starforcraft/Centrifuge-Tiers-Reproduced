@@ -1,18 +1,15 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 repositories {
     maven {
@@ -35,7 +32,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'parchment', version: '2022.11.06-1.18.2'
+    mappings channel: 'official', version: "${mc_version}"
     
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -98,17 +95,18 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:productivebees-377897:4257307")
-    runtimeOnly fg.deobf("curse.maven:compressium-342929:4034865")
-    runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:3812893")
+    implementation fg.deobf("curse.maven:productivebees-377897:4566382")
+    runtimeOnly fg.deobf("curse.maven:compressium-342929:3872847")
+    runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:4068231")
 
-    implementation fg.deobf("curse.maven:top-245211:3965688")
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:${jei_version}")
+    implementation fg.deobf("curse.maven:top-245211:3965693")
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
 
-    runtimeOnly fg.deobf('curse.maven:powah-633483:4096499')
-    runtimeOnly fg.deobf('curse.maven:cloth-348521:3972426')
-    runtimeOnly fg.deobf('curse.maven:architectury-419699:4147231')
+    runtimeOnly fg.deobf('curse.maven:powah-633483:4525233')
+    runtimeOnly fg.deobf('curse.maven:cloth-348521:3972423')
+    runtimeOnly fg.deobf('curse.maven:architectury-419699:4555749')
 }
 
 jar {

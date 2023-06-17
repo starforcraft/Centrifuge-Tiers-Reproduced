@@ -71,8 +71,8 @@ abstract class AbstractContainer extends AbstractContainerMenu {
 
     protected int addSlotRange(Container handler, int index, int x, int y, int amount, int dx) {
         for (int i = 0; i < amount; i++) {
-            if (handler instanceof InventoryHandlerHelper.ItemHandler) {
-                addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) handler, index, x, y));
+            if (handler instanceof InventoryHandlerHelper.ItemHandler itemHandler) {
+                addSlot(new ManualSlotItemHandler(itemHandler, index, x, y));
             }
             else {
                 addSlot(new Slot(handler, index, x, y));
@@ -85,8 +85,8 @@ abstract class AbstractContainer extends AbstractContainerMenu {
 
     protected int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
         for (int i = 0; i < amount; i++) {
-            if (handler instanceof InventoryHandlerHelper.ItemHandler) {
-                addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) handler, index, x, y));
+            if (handler instanceof InventoryHandlerHelper.ItemHandler itemHandler) {
+                addSlot(new ManualSlotItemHandler(itemHandler, index, x, y));
             }
             x += dx;
             index++;

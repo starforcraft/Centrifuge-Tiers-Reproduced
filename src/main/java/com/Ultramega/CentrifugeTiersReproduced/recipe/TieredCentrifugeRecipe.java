@@ -5,7 +5,6 @@ import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelpe
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import cy.jdkdigital.productivebees.ProductiveBees;
 import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
 import cy.jdkdigital.productivebees.init.ModRecipeTypes;
 import net.minecraft.nbt.IntArrayTag;
@@ -20,7 +19,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -125,10 +123,10 @@ public class TieredCentrifugeRecipe extends CentrifugeRecipe {
     @Nonnull
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.CENTRIFUGE_TYPE;
+        return ModRecipeTypes.CENTRIFUGE_TYPE.get();
     }
 
-    public static class Serializer<T extends TieredCentrifugeRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T> {
+    public static class Serializer<T extends TieredCentrifugeRecipe> implements RecipeSerializer<T> {
         final TieredCentrifugeRecipe.Serializer.IRecipeFactory<T> factory;
 
         public Serializer(TieredCentrifugeRecipe.Serializer.IRecipeFactory<T> factory) {

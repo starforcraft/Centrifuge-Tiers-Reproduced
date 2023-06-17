@@ -49,11 +49,9 @@ public class InventoryHandlerHelper {
                         return slot;
                     }
                 } else if (!Gene.getAttributeName(insertStack).isEmpty()) {
-                    if (
-                            Gene.getAttributeName(stack).equals(Gene.getAttributeName(insertStack)) &&
-                                    Gene.getValue(stack).equals(Gene.getValue(insertStack)) &&
-                                    Gene.getPurity(stack).equals(Gene.getPurity(insertStack))
-                    ) {
+                    if (Gene.getAttributeName(stack).equals(Gene.getAttributeName(insertStack)) &&
+                            Gene.getValue(stack).equals(Gene.getValue(insertStack)) &&
+                            Gene.getPurity(stack).equals(Gene.getPurity(insertStack))) {
                         return slot;
                     }
                 } else if (stack.isEmpty() || areItemsAndTagsEqual(stack, insertStack)) {
@@ -65,12 +63,7 @@ public class InventoryHandlerHelper {
     }
 
     public static boolean areItemsAndTagsEqual(ItemStack stack1, ItemStack stack2) {
-        return (
-                stack1.isEmpty() && stack2.isEmpty()
-        ) ||
-                (
-                        stack1.getItem() == stack2.getItem() && areItemStackTagsEqual(stack1, stack2)
-                );
+        return (stack1.isEmpty() && stack2.isEmpty()) || (stack1.getItem() == stack2.getItem() && areItemStackTagsEqual(stack1, stack2));
     }
 
     public static boolean areItemStackTagsEqual(ItemStack stackA, ItemStack stackB) {

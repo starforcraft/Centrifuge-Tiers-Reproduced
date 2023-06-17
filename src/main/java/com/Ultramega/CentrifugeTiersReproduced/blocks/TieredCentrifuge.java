@@ -2,7 +2,7 @@ package com.Ultramega.CentrifugeTiersReproduced.blocks;
 
 import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
 import com.Ultramega.CentrifugeTiersReproduced.blockentity.TieredCentrifugeBlockEntity;
-import com.Ultramega.CentrifugeTiersReproduced.registry.ModTileEntityTypes;
+import com.Ultramega.CentrifugeTiersReproduced.registry.ModBlockEntityTypes;
 
 import cy.jdkdigital.productivebees.common.block.PoweredCentrifuge;
 import net.minecraft.core.BlockPos;
@@ -46,10 +46,10 @@ public class TieredCentrifuge extends PoweredCentrifuge {
 
     private BlockEntityType getBlockEntity() {
         switch(tier) {
-            case HIGH_END -> { return ModTileEntityTypes.HIGH_END_CENTRIFUGE.get(); }
-            case NUCLEAR -> { return ModTileEntityTypes.NUCLEAR_CENTRIFUGE.get(); }
-            case COSMIC -> { return ModTileEntityTypes.COSMIC_CENTRIFUGE.get(); }
-            case CREATIVE -> { return ModTileEntityTypes.CREATIVE_CENTRIFUGE.get(); }
+            case HIGH_END -> { return ModBlockEntityTypes.HIGH_END_CENTRIFUGE.get(); }
+            case NUCLEAR -> { return ModBlockEntityTypes.NUCLEAR_CENTRIFUGE.get(); }
+            case COSMIC -> { return ModBlockEntityTypes.COSMIC_CENTRIFUGE.get(); }
+            case CREATIVE -> { return ModBlockEntityTypes.CREATIVE_CENTRIFUGE.get(); }
             default -> { return null; }
         }
     }

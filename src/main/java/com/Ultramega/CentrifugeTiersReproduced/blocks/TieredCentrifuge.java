@@ -67,8 +67,8 @@ public class TieredCentrifuge extends PoweredCentrifuge {
         if(Screen.hasShiftDown()) {
             if (tier == CentrifugeTiers.CREATIVE) {
                 components.add(Component.translatable(
-                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy",
-                        tier.getSpeed()).withStyle(ChatFormatting.YELLOW));
+                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy")
+                        .withStyle(ChatFormatting.YELLOW));
                 components.add(Component.translatable(
                         "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated",
                         tier.getSpeed()).withStyle(ChatFormatting.AQUA));
@@ -77,7 +77,7 @@ public class TieredCentrifuge extends PoweredCentrifuge {
                         tier.getOutputMultiplier()).withStyle(ChatFormatting.AQUA));
                 components.add(Component.translatable(
                         "block.centrifugetiersreproduced.centrifuge.tooltip.slots",
-                        tier.getInputSlotAmount()-1).withStyle(ChatFormatting.AQUA));
+                        tier.getInputSlotAmount()).withStyle(ChatFormatting.AQUA));
             }
             else {
                 components.add(Component.translatable(
@@ -88,7 +88,7 @@ public class TieredCentrifuge extends PoweredCentrifuge {
                         tier.getOutputMultiplier()).withStyle(ChatFormatting.AQUA));
                 components.add(Component.translatable(
                         "block.centrifugetiersreproduced.centrifuge.tooltip.slots",
-                        tier.getInputSlotAmount()-1).withStyle(ChatFormatting.AQUA));
+                        tier.getInputSlotAmount()).withStyle(ChatFormatting.AQUA));
                 components.add(Component.translatable(
                         "block.centrifugetiersreproduced.centrifuge.tooltip.energyCapacity",
                         String.format("%,d", tier.getEnergyCapacity())).withStyle(ChatFormatting.AQUA));

@@ -3,7 +3,6 @@ package com.ultramega.centrifugetiersreproduced.blocks;
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
 import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
 import com.ultramega.centrifugetiersreproduced.registry.ModBlockEntityTypes;
-import com.ultramega.centrifugetiersreproduced.config.CentrifugeTiersReproducedConfig;
 
 import cy.jdkdigital.productivebees.common.block.PoweredCentrifuge;
 import net.minecraft.ChatFormatting;
@@ -66,64 +65,41 @@ public class TieredCentrifuge extends PoweredCentrifuge {
     public void appendHoverText(@NotNull ItemStack stack, @javax.annotation.Nullable BlockGetter getter, @NotNull List<Component> components, @NotNull TooltipFlag flag) {
         super.appendHoverText(stack, getter, components, flag);
         if(Screen.hasShiftDown()) {
-            int outputMultiplier;
-            int speedMultiplier;
-            int additionalCombSlots;
-            int maxStackSize;
-            int energyFluidCapacity;
-
-            switch (this.tier) {
-                case HIGH_END -> {
-                    outputMultiplier = CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_OUTPUT_MULTIPLIER.get();
-                    speedMultiplier = CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_SPEED.get();
-                    additionalCombSlots = 1;
-                    maxStackSize = CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_ITEM_MAX_STACK_SIZE.get();
-                    energyFluidCapacity = CentrifugeTiersReproducedConfig.HIGH_END_CENTRIFUGE_ENERGY_CAPACITY.get();
-                }
-                case NUCLEAR -> {
-                    outputMultiplier = CentrifugeTiersReproducedConfig.NUCLEAR_CENTRIFUGE_OUTPUT_MULTIPLIER.get();
-                    speedMultiplier = CentrifugeTiersReproducedConfig.NUCLEAR_CENTRIFUGE_SPEED.get();
-                    additionalCombSlots = 2;
-                    maxStackSize = CentrifugeTiersReproducedConfig.NUCLEAR_CENTRIFUGE_ITEM_MAX_STACK_SIZE.get();
-                    energyFluidCapacity = CentrifugeTiersReproducedConfig.NUCLEAR_CENTRIFUGE_ENERGY_CAPACITY.get();
-                }
-                case COSMIC -> {
-                    outputMultiplier = CentrifugeTiersReproducedConfig.COSMIC_CENTRIFUGE_OUTPUT_MULTIPLIER.get();
-                    speedMultiplier = CentrifugeTiersReproducedConfig.COSMIC_CENTRIFUGE_SPEED.get();
-                    additionalCombSlots = 3;
-                    maxStackSize = CentrifugeTiersReproducedConfig.COSMIC_CENTRIFUGE_ITEM_MAX_STACK_SIZE.get();
-                    energyFluidCapacity = CentrifugeTiersReproducedConfig.COSMIC_CENTRIFUGE_ENERGY_CAPACITY.get();
-                }
-                case CREATIVE -> {
-                    outputMultiplier = CentrifugeTiersReproducedConfig.CREATIVE_CENTRIFUGE_OUTPUT_MULTIPLIER.get();
-                    speedMultiplier = 0;
-                    additionalCombSlots = 3;
-                    maxStackSize = CentrifugeTiersReproducedConfig.CREATIVE_CENTRIFUGE_ITEM_MAX_STACK_SIZE.get();
-                    energyFluidCapacity = CentrifugeTiersReproducedConfig.CREATIVE_CENTRIFUGE_FLUID_CAPACITY.get();
-                }
-                default -> {
-                    outputMultiplier = 0;
-                    speedMultiplier = 0;
-                    additionalCombSlots = 0;
-                    maxStackSize = 0;
-                    energyFluidCapacity = 0;
-                }
+            if (tier == CentrifugeTiers.CREATIVE) {
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy",
+                        tier.getSpeed()).withStyle(ChatFormatting.YELLOW));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated",
+                        tier.getSpeed()).withStyle(ChatFormatting.AQUA));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.moreOutput",
+                        tier.getOutputMultiplier()).withStyle(ChatFormatting.AQUA));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.slots",
+                        tier.getInputSlotAmount()-1).withStyle(ChatFormatting.AQUA));
+            }
+            else {
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.fasterThanHeated",
+                        tier.getSpeed()).withStyle(ChatFormatting.AQUA));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.moreOutput",
+                        tier.getOutputMultiplier()).withStyle(ChatFormatting.AQUA));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.slots",
+                        tier.getInputSlotAmount()-1).withStyle(ChatFormatting.AQUA));
+                components.add(Component.translatable(
+                        "block.centrifugetiersreproduced.centrifuge.tooltip.energyCapacity",
+                        String.format("%,d", tier.getEnergyCapacity())).withStyle(ChatFormatting.AQUA));
             }
 
-            String toolTipText;
-            if(tier == CentrifugeTiers.HIGH_END) {
-                toolTipText = String.format("%sx the output\n%sx faster than Heated Centrifuge\n%s additional honeycomb slot\nItem Max Stack Size: %s\nEnergy/Fluid Capacity: %s",
-                        outputMultiplier, speedMultiplier, additionalCombSlots, maxStackSize, energyFluidCapacity);
-            } else if (tier == CentrifugeTiers.CREATIVE) {
-                toolTipText = String.format("%sx the output\n1 Tick per Block\n%s additional honeycomb slots\nItem Max Stack Size: %s\nEnergy/Fluid Capacity: %s",
-                        outputMultiplier, additionalCombSlots, maxStackSize, energyFluidCapacity);
-            } else {
-                toolTipText = String.format("%sx the output\n%sx faster than Heated Centrifuge\n%s additional honeycomb slots\nItem Max Stack Size: %s\nEnergy/Fluid Capacity: %s",
-                        outputMultiplier, speedMultiplier, additionalCombSlots, maxStackSize, energyFluidCapacity);
-            }
-
-            components.add(Component.literal(toolTipText)
-                    .withStyle(ChatFormatting.AQUA));
+            components.add(Component.translatable(
+                    "block.centrifugetiersreproduced.centrifuge.tooltip.fluidCapacity",
+                    String.format("%,d", tier.getFluidCapacity())).withStyle(ChatFormatting.AQUA));
+            components.add(Component.translatable(
+                    "block.centrifugetiersreproduced.centrifuge.tooltip.maxStackSize",
+                    String.format("%,d", tier.getItemMaxStackSize())).withStyle(ChatFormatting.AQUA));
         } else {
             components.add(Component.literal("Press SHIFT for more information")
                     .withStyle(ChatFormatting.YELLOW));

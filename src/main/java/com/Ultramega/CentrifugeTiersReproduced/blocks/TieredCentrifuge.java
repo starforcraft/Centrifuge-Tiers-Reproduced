@@ -68,11 +68,11 @@ public class TieredCentrifuge extends PoweredCentrifuge {
         if(Screen.hasShiftDown()) {
             if (tier == CentrifugeTiers.CREATIVE) {
                 components.add(Component.translatable(
-                                "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy")
+                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy")
                         .withStyle(ChatFormatting.YELLOW));
                 components.add(Component.translatable(
-                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated",
-                        tier.getSpeed()).withStyle(ChatFormatting.AQUA));
+                        "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated")
+                        .withStyle(ChatFormatting.AQUA));
                 components.add(Component.translatable(
                         "block.centrifugetiersreproduced.centrifuge.tooltip.moreOutput",
                         tier.getOutputMultiplier()).withStyle(ChatFormatting.AQUA));
@@ -102,7 +102,7 @@ public class TieredCentrifuge extends PoweredCentrifuge {
                     "block.centrifugetiersreproduced.centrifuge.tooltip.maxStackSize",
                     String.format("%,d", tier.getItemMaxStackSize())).withStyle(ChatFormatting.AQUA));
         } else {
-            components.add(Component.literal("Press SHIFT for more information")
+            components.add(Component.translatable("block.centrifugetiersreproduced.centrifuge.tooltip.shiftForMore")
                     .withStyle(ChatFormatting.YELLOW));
         }
     }

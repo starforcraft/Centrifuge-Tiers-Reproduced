@@ -1,7 +1,16 @@
 {
   "itemGroup.centrifugetiersreproduced" : "Centrifuge Tiers Reproduced",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.shiftForMore" : "Press SHIFT for more information",
   "block.centrifugetiersreproduced.high_end_centrifuge": "High-End Centrifuge",
   "block.centrifugetiersreproduced.nuclear_centrifuge": "Nuclear Centrifuge",
   "block.centrifugetiersreproduced.cosmic_centrifuge": "Cosmic Centrifuge",
-  "block.centrifugetiersreproduced.creative_centrifuge": "Creative Centrifuge"
+  "block.centrifugetiersreproduced.creative_centrifuge": "Creative Centrifuge",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.fasterThanHeated": "%sx faster than Heated Centrifuge",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.moreOutput": "%sx the output",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.slots": "Input Slots: %s",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.maxStackSize": "Item Max Stack Size: %s",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.fluidCapacity": "Fluid Capacity: %s",
+  "block.centrifugetiersreproduced.centrifuge.tooltip.energyCapacity": "Energy Capacity: %s",
+  "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated": "1 Tick per Block",
+  "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy": "Needs no Energy to operate"
 }

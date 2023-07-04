@@ -4,12 +4,13 @@
   "block.centrifugetiersreproduced.nuclear_centrifuge": "Nuclear Centrifuge",
   "block.centrifugetiersreproduced.cosmic_centrifuge": "Cosmic Centrifuge",
   "block.centrifugetiersreproduced.creative_centrifuge": "Creative Centrifuge",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.fasterThanHeated": "%sx faster than Heated Centrifuge",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.moreOutput": "%sx the output",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.slots": "Input Slots: %s",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.maxStackSize": "Item Max Stack Size: %s",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.fluidCapacity": "Fluid Capacity: %s",
-  "block.centrifugetiersreproduced.centrifuge.tooltip.energyCapacity": "Energy Capacity: %s",
-  "block.centrifugetiersreproduced.creative_centrifuge.tooltip.fasterThanHeated": "1 Tick per Block",
-  "block.centrifugetiersreproduced.creative_centrifuge.tooltip.noEnergy": "Needs no Energy to operate"
+  "tooltip.centrifugetiersreproduced.centrifuge.pressShiftForMore" : "Press SHIFT for more information",
+  "tooltip.centrifugetiersreproduced.centrifuge.fasterThanHeated": "%sx faster than Heated Centrifuge",
+  "tooltip.centrifugetiersreproduced.centrifuge.outputMultiplier": "Output Multiplier: %s",
+  "tooltip.centrifugetiersreproduced.centrifuge.inputSlots": "Input Slots: %s",
+  "tooltip.centrifugetiersreproduced.centrifuge.maxStackSize": "Item Max Stack Size: %s",
+  "tooltip.centrifugetiersreproduced.centrifuge.fluidCapacity": "Fluid Capacity: %s",
+  "tooltip.centrifugetiersreproduced.centrifuge.energyCapacity": "Energy Capacity: %s",
+  "tooltip.centrifugetiersreproduced.creative_centrifuge.oneTickPerBlock": "1 Tick per Block",
+  "tooltip.centrifugetiersreproduced.creative_centrifuge.needsNoEnergy": "Needs no Energy to operate"
 }

@@ -40,10 +40,10 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.drawString(this.font, this.title, -5, 6, 4210752);
+        guiGraphics.drawString(this.font, this.title, -5, 6, 4210752, false);
 
         int inventoryY = tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 78 : 96;
-        guiGraphics.drawString(this.font, this.playerInventoryTitle, -5, this.getYSize() - inventoryY + 2, 4210752);
+        guiGraphics.drawString(this.font, this.playerInventoryTitle, -5, this.getYSize() - inventoryY + 2, 4210752, false);
 
         this.menu.tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(handler -> {
             FluidStack fluidStack = handler.getFluidInTank(0);
@@ -93,18 +93,18 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         int arrowX = tier == CentrifugeTiers.CREATIVE ? 176 : 202;
         int arrowY = tier == CentrifugeTiers.COSMIC ? 71 : 52;
 
-        int progress = (int) (this.menu.tileEntity.recipeProgress * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+        int progress = (int) (this.menu.tileEntity.recipeProgress[0] * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
         guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 17, arrowX, arrowY, progress + 1, 16);
 
-        int progress2 = (int) (this.menu.tileEntity.recipeProgress2 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+        int progress2 = (int) (this.menu.tileEntity.recipeProgress[1] * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
         guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 53, arrowX, arrowY, progress2 + 1, 16);
 
         if(tier.getInputSlotAmount() > 2) {
-            int progress3 = (int) (this.menu.tileEntity.recipeProgress3 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+            int progress3 = (int) (this.menu.tileEntity.recipeProgress[2] * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
             guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 35, arrowX, arrowY, progress3 + 1, 16);
 
             if(tier.getInputSlotAmount() > 3) {
-                int progress4 = (int) (this.menu.tileEntity.recipeProgress4 * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
+                int progress4 = (int) (this.menu.tileEntity.recipeProgress[3] * (24 / (float) this.menu.tileEntity.getProcessingTime(this.menu.tileEntity.getCurrentRecipe())));
                 guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 71, arrowX, arrowY, progress4 + 1, 16);
             }
         }

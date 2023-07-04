@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentrifugeContainer> {
-    private CentrifugeTiers tier;
+    private final CentrifugeTiers tier;
 
     public TieredCentrifugeScreen(TieredCentrifugeContainer container, Inventory inv, Component titleIn) {
         super(container, inv, titleIn);
@@ -95,18 +95,18 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         int arrowX = tier == CentrifugeTiers.CREATIVE ? 176 : 202;
         int arrowY = tier == CentrifugeTiers.COSMIC ? 71 : 52;
 
-        int progress = (int) (this.menu.tileEntity.recipeProgress * (24 / (float) this.menu.tileEntity.getProcessingTime()));
+        int progress = (int) (this.menu.tileEntity.recipeProgress[0] * (24 / (float) this.menu.tileEntity.getProcessingTime()));
         blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 17, arrowX, arrowY, progress + 1, 16);
 
-        int progress2 = (int) (this.menu.tileEntity.recipeProgress2 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
+        int progress2 = (int) (this.menu.tileEntity.recipeProgress[1] * (24 / (float) this.menu.tileEntity.getProcessingTime()));
         blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 53, arrowX, arrowY, progress2 + 1, 16);
 
         if(tier.getInputSlotAmount() > 2) {
-            int progress3 = (int) (this.menu.tileEntity.recipeProgress3 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
+            int progress3 = (int) (this.menu.tileEntity.recipeProgress[2] * (24 / (float) this.menu.tileEntity.getProcessingTime()));
             blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 35, arrowX, arrowY, progress3 + 1, 16);
 
             if(tier.getInputSlotAmount() > 3) {
-                int progress4 = (int) (this.menu.tileEntity.recipeProgress4 * (24 / (float) this.menu.tileEntity.getProcessingTime()));
+                int progress4 = (int) (this.menu.tileEntity.recipeProgress[3] * (24 / (float) this.menu.tileEntity.getProcessingTime()));
                 blit(matrixStack, this.getGuiLeft() + 35, this.getGuiTop() + 71, arrowX, arrowY, progress4 + 1, 16);
             }
         }

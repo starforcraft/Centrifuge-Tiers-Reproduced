@@ -3,7 +3,7 @@ package com.Ultramega.CentrifugeTiersReproduced.container;
 import com.Ultramega.CentrifugeTiersReproduced.CentrifugeTiers;
 import com.Ultramega.CentrifugeTiersReproduced.blockentity.InventoryHandlerHelper;
 import com.Ultramega.CentrifugeTiersReproduced.blockentity.TieredCentrifugeBlockEntity;
-import com.Ultramega.CentrifugeTiersReproduced.blocks.TieredCentrifuge;
+import com.Ultramega.CentrifugeTiersReproduced.blocks.TieredCentrifugeBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -70,50 +70,20 @@ public class TieredCentrifugeContainer extends AbstractContainer {
             }
         });
 
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return tileEntity.recipeProgress;
-            }
+        for(int i = 0; i < tileEntity.recipeProgress.length; i++) {
+            int finalI = i;
+            addDataSlot(new DataSlot() {
+                @Override
+                public int get() {
+                    return tileEntity.recipeProgress[finalI];
+                }
 
-            @Override
-            public void set(int value) {
-                tileEntity.recipeProgress = value;
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return tileEntity.recipeProgress2;
-            }
-
-            @Override
-            public void set(int value) {
-                tileEntity.recipeProgress2 = value;
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return tileEntity.recipeProgress3;
-            }
-
-            @Override
-            public void set(int value) {
-                tileEntity.recipeProgress3 = value;
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return tileEntity.recipeProgress4;
-            }
-
-            @Override
-            public void set(int value) {
-                tileEntity.recipeProgress4 = value;
-            }
-        });
+                @Override
+                public void set(int value) {
+                    tileEntity.recipeProgress[finalI] = value;
+                }
+            });
+        }
 
         this.tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(inv -> {
             // Comb slot
@@ -174,7 +144,7 @@ public class TieredCentrifugeContainer extends AbstractContainer {
 
     @Override
     public boolean stillValid(@Nonnull final Player player) {
-        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof TieredCentrifuge && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
+        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof TieredCentrifugeBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
     }
 
     @Override

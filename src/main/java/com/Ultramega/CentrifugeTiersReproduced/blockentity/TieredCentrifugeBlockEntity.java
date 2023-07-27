@@ -67,8 +67,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
-    private CentrifugeRecipe[] currentRecipe = new CentrifugeRecipe[4];
-    public int[] recipeProgress = new int [4];
+    private final CentrifugeRecipe[] currentRecipe = new CentrifugeRecipe[4];
+    public int[] recipeProgress = new int[4];
     public int fluidId = 0;
     public int transferCooldown = -1;
     public CentrifugeTiers tier;
@@ -291,12 +291,14 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
         }
     }
 
+    @Override
     protected double getEnergyConsumptionModifier() {
         double timeUpgradeModifier = getUpgradeCount(ModItems.UPGRADE_TIME.get()) * ProductiveBeesConfig.UPGRADES.timeBonus.get();
 
-        return Math.max(1, timeUpgradeModifier) * 5;
+        return Math.max(1, timeUpgradeModifier) * tier.getSpeed() * 10;
     }
 
+    @Override
     public int getProcessingTime() {
         if(tier != CentrifugeTiers.CREATIVE) {
             return (int) (ProductiveBeesConfig.GENERAL.centrifugePoweredProcessingTime.get() * getProcessingTimeModifier() / tier.getSpeed());
@@ -305,6 +307,7 @@ public class TieredCentrifugeBlockEntity extends PoweredCentrifugeBlockEntity {
         }
     }
 
+    @Override
     protected boolean canOperate() {
         if(tier == CentrifugeTiers.CREATIVE) {
             return true;

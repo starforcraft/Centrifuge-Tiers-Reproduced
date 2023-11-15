@@ -32,11 +32,20 @@ public class InventoryHandlerHelper {
 
     private static int getAvailableOutputSlot(ItemHandler handler, ItemStack insertStack, List<Integer> blacklistedSlots, CentrifugeTiers tier) {
         int emptySlot = 0;
-        for (int slot : handler.getOutputSlots()) {
+        int outputSlotAmount = 0;
+        if(tier == CentrifugeTiers.COSMIC) {
+            outputSlotAmount = 3;
+        } else if(tier == CentrifugeTiers.CREATIVE) {
+            outputSlotAmount = 7;
+        }
+        for (int i = 0; i < 9 + outputSlotAmount; i++) {
+            int slot = handler.getOutputSlots()[i];
+
             if (blacklistedSlots.contains(slot)) {
                 continue;
             }
             ItemStack stack = handler.getStackInSlot(slot);
+
             if (stack.isEmpty() && emptySlot == 0) {
                 emptySlot = slot;
             } else if (stack.getItem().equals(insertStack.getItem()) && (stack.getCount() + insertStack.getCount()) <= tier.getItemMaxStackSize()) {

@@ -11,6 +11,6 @@
   "tooltip.centrifugetiersreproduced.centrifuge.maxStackSize": "Maximale Item Stapelgröße: %s",
   "tooltip.centrifugetiersreproduced.centrifuge.fluidCapacity": "Flüssigkeitskapazität: %s",
   "tooltip.centrifugetiersreproduced.centrifuge.energyCapacity": "Energiekapazität: %s",
-  "tooltip.centrifugetiersreproduced.creative_centrifuge.oneTickPerBlock": "1 Tick pro Block",
+  "tooltip.centrifugetiersreproduced.creative_centrifuge.oneTickPerComb": "1 Tick pro Wabe",
   "tooltip.centrifugetiersreproduced.creative_centrifuge.needsNoEnergy": "Benötigt keine Energie zum Betrieb"
 }

@@ -1,4 +1,4 @@
-package com.ultramega.centrifugetiersreproduced.jei;
+package com.ultramega.centrifugetiersreproduced.compat.jei;
 
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
 import com.ultramega.centrifugetiersreproduced.gui.TieredCentrifugeScreen;
@@ -9,7 +9,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import static cy.jdkdigital.productivebees.integrations.jei.ProductiveBeesJeiPlugin.CENTRIFUGE_TYPE;
+import static cy.jdkdigital.productivebees.compat.jei.ProductiveBeesJeiPlugin.CENTRIFUGE_TYPE;
 
 @mezz.jei.api.JeiPlugin
 public class JeiPlugin implements IModPlugin {

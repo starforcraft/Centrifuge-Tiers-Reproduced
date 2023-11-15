@@ -95,11 +95,11 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:productivebees-377897:4611321")
+    implementation fg.deobf("curse.maven:productivebees-377897:4860071")
     runtimeOnly fg.deobf("curse.maven:compressium-342929:4584753")
     //runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:4068231")
 
-    implementation fg.deobf("curse.maven:top-245211:4579432")
+    implementation fg.deobf("curse.maven:top-245211:4629624")
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))

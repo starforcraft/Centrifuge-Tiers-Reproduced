@@ -3,6 +3,7 @@ package com.ultramega.centrifugetiersreproduced.container;
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
 import com.ultramega.centrifugetiersreproduced.blockentity.InventoryHandlerHelper;
 import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
+import com.ultramega.centrifugetiersreproduced.blocks.TieredCentrifugeBlock;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 
 public class TieredCentrifugeContainer extends AbstractContainer {
-    public final TieredCentrifugeBlockEntity tileEntity;
+    public final TieredCentrifugeBlockEntity blockEntity;
 
     public final ContainerLevelAccess canInteractWithCallable;
 
@@ -29,28 +30,28 @@ public class TieredCentrifugeContainer extends AbstractContainer {
         this(menuType, windowId, playerInventory, getTileEntity(playerInventory, data));
     }
 
-    public TieredCentrifugeContainer(MenuType menuType, final int windowId, final Inventory playerInventory, final TieredCentrifugeBlockEntity tileEntity) {
+    public TieredCentrifugeContainer(MenuType menuType, final int windowId, final Inventory playerInventory, final TieredCentrifugeBlockEntity blockEntity) {
         super(menuType, windowId);
 
-        this.tileEntity = tileEntity;
-        this.canInteractWithCallable = ContainerLevelAccess.create(tileEntity.getLevel(), tileEntity.getBlockPos());
+        this.blockEntity = blockEntity;
+        this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
         addDataSlots(new ContainerData() {
             @Override
             public int get(int i) {
-                return i == 0 ? tileEntity.fluidId : tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).map(fluidHandler -> fluidHandler.getFluidInTank(0).getAmount()).orElse(0);
+                return i == 0 ? blockEntity.fluidId : blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).map(fluidHandler -> fluidHandler.getFluidInTank(0).getAmount()).orElse(0);
             }
 
             @Override
             public void set(int i, int value) {
                 switch (i) {
                     case 0:
-                        tileEntity.fluidId = value;
+                        blockEntity.fluidId = value;
                     case 1:
-                        tileEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(fluidHandler -> {
+                        blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER).ifPresent(fluidHandler -> {
                             FluidStack fluid = fluidHandler.getFluidInTank(0);
                             if (fluid.isEmpty()) {
-                                fluidHandler.fill(new FluidStack(BuiltInRegistries.FLUID.byId(tileEntity.fluidId), value), IFluidHandler.FluidAction.EXECUTE);
+                                fluidHandler.fill(new FluidStack(BuiltInRegistries.FLUID.byId(blockEntity.fluidId), value), IFluidHandler.FluidAction.EXECUTE);
                             }
                             else {
                                 fluid.setAmount(value);
@@ -65,57 +66,57 @@ public class TieredCentrifugeContainer extends AbstractContainer {
             }
         });
 
-        for(int i = 0; i < tileEntity.recipeProgress.length; i++) {
+        for(int i = 0; i < blockEntity.recipeProgress.length; i++) {
             int finalI = i;
             addDataSlot(new DataSlot() {
                 @Override
                 public int get() {
-                    return tileEntity.recipeProgress[finalI];
+                    return blockEntity.recipeProgress[finalI];
                 }
 
                 @Override
                 public void set(int value) {
-                    tileEntity.recipeProgress[finalI] = value;
+                    blockEntity.recipeProgress[finalI] = value;
                 }
             });
         }
 
-        this.tileEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(inv -> {
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(inv -> {
             // Comb slot
             addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) inv, InventoryHandlerHelper.INPUT_SLOT[0], 13, 17));
             addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) inv, InventoryHandlerHelper.INPUT_SLOT[1], 13, 53));
-            if(tileEntity.tier == CentrifugeTiers.NUCLEAR || tileEntity.tier == CentrifugeTiers.COSMIC || tileEntity.tier == CentrifugeTiers.CREATIVE) {
+            if(blockEntity.tier == CentrifugeTiers.NUCLEAR || blockEntity.tier == CentrifugeTiers.COSMIC || blockEntity.tier == CentrifugeTiers.CREATIVE) {
                 addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) inv, InventoryHandlerHelper.INPUT_SLOT[2], 13, 35));
             }
-            if(tileEntity.tier == CentrifugeTiers.COSMIC || tileEntity.tier == CentrifugeTiers.CREATIVE) {
+            if(blockEntity.tier == CentrifugeTiers.COSMIC || blockEntity.tier == CentrifugeTiers.CREATIVE) {
                 addSlot(new ManualSlotItemHandler((InventoryHandlerHelper.ItemHandler) inv, InventoryHandlerHelper.INPUT_SLOT[3], 13, 71));
             }
 
             // Inventory slots
-            int vertAmount = tileEntity.tier == CentrifugeTiers.COSMIC || tileEntity.tier == CentrifugeTiers.CREATIVE ? 4 : 3;
-            int horAmount = tileEntity.tier == CentrifugeTiers.CREATIVE ? 4 : 3;
+            int vertAmount = blockEntity.tier == CentrifugeTiers.COSMIC || blockEntity.tier == CentrifugeTiers.CREATIVE ? 4 : 3;
+            int horAmount = blockEntity.tier == CentrifugeTiers.CREATIVE ? 4 : 3;
             addSlotBox(inv, InventoryHandlerHelper.OUTPUT_SLOTS[0], 67, 17, horAmount, 18, vertAmount, 18);
         });
 
-        if(tileEntity.tier != CentrifugeTiers.CREATIVE) {
-            this.tileEntity.getUpgradeHandler().ifPresent(upgradeHandler -> {
+        if(blockEntity.tier != CentrifugeTiers.CREATIVE) {
+            this.blockEntity.getUpgradeHandler().ifPresent(upgradeHandler -> {
                 addSlotBox(upgradeHandler, 0, 165, 8, 1, 18, 4, 18);
             });
         }
 
-        int topRow = tileEntity.tier == CentrifugeTiers.COSMIC || tileEntity.tier == CentrifugeTiers.CREATIVE ? 102 : 84;
+        int topRow = blockEntity.tier == CentrifugeTiers.COSMIC || blockEntity.tier == CentrifugeTiers.CREATIVE ? 102 : 84;
         layoutPlayerInventorySlots(playerInventory, 0, -5, topRow);
 
         // Energy
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return tileEntity.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
+                return blockEntity.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getEnergyStored).orElse(0);
             }
 
             @Override
             public void set(int value) {
-                tileEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
+                blockEntity.getCapability(ForgeCapabilities.ENERGY).ifPresent(handler -> {
                     if (handler.getEnergyStored() > 0) {
                         handler.extractEnergy(handler.getEnergyStored(), false);
                     }
@@ -139,11 +140,11 @@ public class TieredCentrifugeContainer extends AbstractContainer {
 
     @Override
     public boolean stillValid(@Nonnull final Player player) {
-        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof com.ultramega.centrifugetiersreproduced.blocks.TieredCentrifugeBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
+        return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof TieredCentrifugeBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
     }
 
     @Override
-    protected BlockEntity getTileEntity() {
-        return tileEntity;
+    protected BlockEntity getBlockEntity() {
+        return blockEntity;
     }
 }

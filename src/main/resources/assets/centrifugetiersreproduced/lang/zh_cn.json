@@ -1,0 +1,16 @@
+{
+  "itemGroup.centrifugetiersreproduced" : "离心机层级转载",
+  "block.centrifugetiersreproduced.high_end_centrifuge": "高端离心机",
+  "block.centrifugetiersreproduced.nuclear_centrifuge": "核离心机",
+  "block.centrifugetiersreproduced.cosmic_centrifuge": "宇宙离心机",
+  "block.centrifugetiersreproduced.creative_centrifuge": "创造离心机",
+  "tooltip.centrifugetiersreproduced.centrifuge.pressShiftForMore" : "按 SHIFT 获取更多信息",
+  "tooltip.centrifugetiersreproduced.centrifuge.fasterThanHeated": "比加热离心机快 %sx",
+  "tooltip.centrifugetiersreproduced.centrifuge.outputMultiplier": "输出乘数：%s",
+  "tooltip.centrifugetiersreproduced.centrifuge.inputSlots": "输入插槽：%s",
+  "tooltip.centrifugetiersreproduced.centrifuge.maxStackSize": "物品最大堆叠尺寸：%s",
+  "tooltip.centrifugetiersreproduced.centrifuge.fluidCapacity": "流体容量：%s",
+  "tooltip.centrifugetiersreproduced.centrifuge.energyCapacity": "能量容量：%s",
+  "tooltip.centrifugetiersreproduced.creative_centrifuge.oneTickPerBlock": "每方块 1 个 tick",
+  "tooltip.centrifugetiersreproduced.creative_centrifuge.needsNoEnergy": "无需能源即可运行"
+}

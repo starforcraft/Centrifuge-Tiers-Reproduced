@@ -17,12 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentrifugeContainer> {
-    private CentrifugeTiers tier;
+    private static final ResourceLocation GUI_HIGH_END_TEXTURE = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/high_end_centrifuge.png");
+    private static final ResourceLocation GUI_NUCLEAR_TEXTURE = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/nuclear_centrifuge.png");
+    private static final ResourceLocation GUI_COSMIC_TEXTURE = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/cosmic_centrifuge.png");
+    private static final ResourceLocation GUI_CREATIVE_TEXTURE = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/creative_centrifuge.png");
+
+    private final CentrifugeTiers tier;
 
     public TieredCentrifugeScreen(TieredCentrifugeContainer container, Inventory inv, Component titleIn) {
         super(container, inv, titleIn);
-
-        this.tier = getMenu().blockEntity.tier;
+        this.tier = container.blockEntity.tier;
     }
 
     @Override
@@ -72,7 +76,12 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
 
     @Override
     protected void renderBg(@Nonnull GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation GUI = new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, "textures/gui/" + getMenu().blockEntity.tier.getName() + "_centrifuge.png");
+        ResourceLocation GUI = switch (tier) {
+            case HIGH_END -> GUI_HIGH_END_TEXTURE;
+            case NUCLEAR -> GUI_NUCLEAR_TEXTURE;
+            case COSMIC -> GUI_COSMIC_TEXTURE;
+            case CREATIVE -> GUI_CREATIVE_TEXTURE;
+        };
 
         // Draw main screen
         guiGraphics.blit(GUI, this.getGuiLeft() - 13, this.getGuiTop(), 0, 0, this.getXSize() + (tier == CentrifugeTiers.CREATIVE ? 0 : 26), this.getYSize() + (tier == CentrifugeTiers.COSMIC || tier == CentrifugeTiers.CREATIVE ? 18 : 0));
@@ -111,7 +120,7 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
             FluidStack fluidStack = handler.getFluidInTank(0);
 
             if (fluidStack.getAmount() > 0) {
-                FluidContainerUtil.renderFluidTank(guiGraphics, this, fluidStack, handler.getTankCapacity(0), tier == CentrifugeTiers.CREATIVE ? 145 : 127,17, 4, 52, 0);
+                FluidContainerUtil.renderFluidTank(guiGraphics, this, fluidStack, handler.getTankCapacity(0), tier == CentrifugeTiers.CREATIVE ? 145 : 127,17, 4, tier == CentrifugeTiers.CREATIVE || tier == CentrifugeTiers.COSMIC ? 70 : 52, 0);
             }
         });
     }

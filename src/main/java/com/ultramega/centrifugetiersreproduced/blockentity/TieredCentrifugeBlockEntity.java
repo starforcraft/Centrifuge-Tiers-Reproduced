@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
 import com.ultramega.centrifugetiersreproduced.container.TieredCentrifugeContainer;
-import com.ultramega.centrifugetiersreproduced.recipe.TieredCentrifugeRecipe;
 import com.ultramega.centrifugetiersreproduced.registry.IMultiRecipeProcessingBlockEntity;
 import com.ultramega.centrifugetiersreproduced.registry.ModBlockEntityTypes;
 import com.ultramega.centrifugetiersreproduced.registry.ModBlocks;
@@ -18,7 +17,6 @@ import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
 import cy.jdkdigital.productivebees.common.recipe.TimedRecipeInterface;
 import cy.jdkdigital.productivebees.compat.jei.ingredients.BeeIngredient;
 import cy.jdkdigital.productivebees.init.ModItems;
-import cy.jdkdigital.productivebees.init.ModRecipeTypes;
 import cy.jdkdigital.productivebees.init.ModTags;
 import cy.jdkdigital.productivebees.util.BeeAttributes;
 import cy.jdkdigital.productivebees.util.BeeHelper;
@@ -33,7 +31,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -58,7 +55,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -168,14 +164,16 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
 
     @Override
     public int getProcessingTime(TimedRecipeInterface recipe) {
-        if(tier != CentrifugeTiers.CREATIVE) {
-            return (int) ((recipe != null ? recipe.getProcessingTime() : ProductiveBeesConfig.GENERAL.centrifugeProcessingTime.get()) * getProcessingTimeModifier() / tier.getSpeed());
-        } else {
-            return 0;
-        }
+        return (int) (
+                (recipe != null ? recipe.getProcessingTime() : ProductiveBeesConfig.GENERAL.centrifugeProcessingTime.get()) * getProcessingTimeModifier()
+        );
     }
 
     protected double getProcessingTimeModifier() {
+        return getProcessingTimeModifier2() / 3 / tier.getSpeed();
+    }
+
+    protected double getProcessingTimeModifier2() {
         double timeUpgradeModifier = 1 - (getUpgradeCount(ModItems.UPGRADE_TIME.get()) * ProductiveBeesConfig.UPGRADES.timeBonus.get());
 
         return Math.max(0, timeUpgradeModifier);
@@ -355,12 +353,18 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
         return isAllowedByFilter && recipe != null;
     }
 
-    static Map<ItemStack, CentrifugeRecipe> blockRecipeMap = new HashMap<>();
+    static Map<String, CentrifugeRecipe> blockRecipeMap = new HashMap<>();
     protected CentrifugeRecipe getRecipe(IItemHandlerModifiable inputHandler) {
+        if (blockRecipeMap.size() > 5000) {
+            blockRecipeMap.clear();
+        }
+
         ItemStack input = inputHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot]);
+        String cacheKey = ForgeRegistries.ITEMS.getKey(input.getItem()) + (input.getTag() != null ? input.getTag().getAsString() : "");
+
         var directRecipe = getRecipe2(inputHandler);
         if (input.is(ModTags.Forge.COMBS) && directRecipe == null) {
-            if (!blockRecipeMap.containsKey(input)) {
+            if (!blockRecipeMap.containsKey(cacheKey)) {
                 ItemStack singleComb;
                 // config honeycomb
                 if (input.getItem() instanceof CombBlockItem) {
@@ -370,17 +374,39 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
                     singleComb = BeeHelper.getRecipeOutputFromInput(level, input.getItem());
                 }
                 IItemHandlerModifiable inv = new InventoryHandlerHelper.ItemHandler(5);
+                // Look up recipe for the single comb that makes up the input comb block
                 inv.setStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot], singleComb);
-                blockRecipeMap.put(input, getRecipe2(inv));
+                blockRecipeMap.put(cacheKey, getRecipe2(inv));
             }
-            return blockRecipeMap.get(input);
+            return blockRecipeMap.get(cacheKey);
         }
         return directRecipe;
     }
 
+    static Map<String, CentrifugeRecipe> recipeMap = new HashMap<>();
     protected CentrifugeRecipe getRecipe2(IItemHandlerModifiable inputHandler) {
+        if (recipeMap.size() > 5000) {
+            recipeMap.clear();
+        }
         ItemStack input = inputHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot]);
-        if (input.isEmpty() || input == ItemStack.EMPTY || level == null) {
+        if (input.isEmpty() || level == null) {
+            return null;
+        }
+
+        String cacheKey = ForgeRegistries.ITEMS.getKey(input.getItem()) + (input.getTag() != null ? input.getTag().getAsString() : "");
+        if (!recipeMap.containsKey(cacheKey)) {
+            recipeMap.put(cacheKey, BeeHelper.getCentrifugeRecipe(level, inputHandler));
+        }
+
+        return recipeMap.getOrDefault(cacheKey, null);
+    }
+
+    /*protected CentrifugeRecipe getRecipe2(IItemHandlerModifiable inputHandler) {
+        if (recipeMap.size() > 5000) {
+            recipeMap.clear();
+        }
+        ItemStack input = inputHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot]);
+        if (input.isEmpty() || level == null) {
             return null;
         }
 
@@ -401,7 +427,7 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
         }
 
         return currentRecipe[currentSlot];
-    }
+    }*/
 
 
     protected boolean canProcessRecipe(@Nullable CentrifugeRecipe recipe, IItemHandlerModifiable invHandler) {

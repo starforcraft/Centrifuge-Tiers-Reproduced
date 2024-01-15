@@ -29,7 +29,7 @@ public class CentrifugeTiersReproducedConfig {
         builder.push("Centrifuge Tiers Reproduced Options");
             HIGH_END_CENTRIFUGE_SPEED = builder
                 .comment("\nHigh End Centrifuge Speed")
-                .defineInRange("highEndCentrifugeSpeed", 5, 1, Integer.MAX_VALUE);
+                .defineInRange("highEndCentrifugeSpeed", 4, 1, Integer.MAX_VALUE);
             HIGH_END_CENTRIFUGE_ITEM_MAX_STACK_SIZE = builder
                     .comment("\nHigh End Centrifuge Item Max Stack Size")
                     .defineInRange("highEndCentrifugeItemMaxStackSize", 256, 1, Integer.MAX_VALUE);
@@ -45,7 +45,7 @@ public class CentrifugeTiersReproducedConfig {
 
             NUCLEAR_CENTRIFUGE_SPEED = builder
                     .comment("\nNuclear Centrifuge Speed")
-                    .defineInRange("nuclearCentrifugeSpeed", 8, 1, Integer.MAX_VALUE);
+                    .defineInRange("nuclearCentrifugeSpeed", 5, 1, Integer.MAX_VALUE);
             NUCLEAR_CENTRIFUGE_ITEM_MAX_STACK_SIZE = builder
                     .comment("\nNuclear Centrifuge Item Max Stack Size")
                     .defineInRange("nuclearCentrifugeItemMaxStackSize", 512, 1, Integer.MAX_VALUE);
@@ -61,7 +61,7 @@ public class CentrifugeTiersReproducedConfig {
 
             COSMIC_CENTRIFUGE_SPEED = builder
                     .comment("\nCosmic Centrifuge Speed")
-                    .defineInRange("cosmicCentrifugeSpeed", 12, 1, Integer.MAX_VALUE);
+                    .defineInRange("cosmicCentrifugeSpeed", 7, 1, Integer.MAX_VALUE);
             COSMIC_CENTRIFUGE_ITEM_MAX_STACK_SIZE = builder
                     .comment("\nCosmic Centrifuge Item Max Stack Size")
                     .defineInRange("cosmicCentrifugeItemMaxStackSize", 1024, 1, Integer.MAX_VALUE);

@@ -15,7 +15,7 @@ description="This mod adds tiers to the centrifuges from Productive Bees."
 [[dependencies.centrifugetiersreproduced]]
     modId="productivebees"
     mandatory=true
-    versionRange="[1.20.1-12.2.15,)"
+    versionRange="[1.20.1-12.3.0,)"
     ordering="NONE"
     side="BOTH"
 

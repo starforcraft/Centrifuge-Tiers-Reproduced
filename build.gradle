@@ -11,19 +11,6 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-repositories {
-    maven {
-        name = "ModMaven"
-        url = "https://modmaven.k-4u.nl"
-    }
-    maven {
-        url "https://www.cursemaven.com"
-        content {
-            includeGroup "curse.maven"
-        }
-    }
-}
-
 version = "${mod_version}"
 group = "com.ultramega.centrifugetiersreproduced"
 archivesBaseName = "${modid}"
@@ -92,10 +79,29 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+repositories {
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.k-4u.nl"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    flatDir {
+        dir 'libs'
+    }
+}
+
+
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:productivebees-377897:5029855")
+    implementation fg.deobf("local.libs:productivelib-${mc_version}:${productive_lib_version}")
+    implementation fg.deobf("curse.maven:productivebees-377897:5118081")
+
     runtimeOnly fg.deobf("curse.maven:compressium-342929:4584753")
     //runtimeOnly fg.deobf("curse.maven:allthecompressed-514045:4068231")
 

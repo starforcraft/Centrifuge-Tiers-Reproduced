@@ -12,7 +12,7 @@ import com.ultramega.centrifugetiersreproduced.registry.ModMenuTypes;
 import cy.jdkdigital.productivebees.ProductiveBeesConfig;
 import cy.jdkdigital.productivebees.common.block.Centrifuge;
 import cy.jdkdigital.productivebees.common.block.entity.CapabilityBlockEntity;
-import cy.jdkdigital.productivebees.common.block.entity.UpgradeableBlockEntity;
+import cy.jdkdigital.productivelib.common.block.entity.UpgradeableBlockEntity;
 import cy.jdkdigital.productivebees.common.item.*;
 import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
 import cy.jdkdigital.productivebees.common.recipe.TimedRecipeInterface;
@@ -341,7 +341,7 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
             for (ItemStack filter : filterUpgrades) {
                 List<Supplier<BeeIngredient>> allowedBees = FilterUpgradeItem.getAllowedBees(filter);
                 for (Supplier<BeeIngredient> allowedBee : allowedBees) {
-                    List<ItemStack> produceList = BeeHelper.getBeeProduce(level, (Bee) allowedBee.get().getCachedEntity(level), false);
+                    List<ItemStack> produceList = BeeHelper.getBeeProduce(level, (Bee) allowedBee.get().getCachedEntity(level), false, 1.0);
                     for (ItemStack pStack: produceList) {
                         if (pStack.getItem().equals(stack.getItem())) {
                             isAllowedByFilter = true;
@@ -437,6 +437,10 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
     }
 
     protected void completeRecipeProcessing(CentrifugeRecipe recipe, IItemHandlerModifiable invHandler, RandomSource random) {
+        this.completeRecipeProcessing(recipe, invHandler, random, true);
+    }
+
+    protected void completeRecipeProcessing(CentrifugeRecipe recipe, IItemHandlerModifiable invHandler, RandomSource random, boolean stripWax) {
         ItemStack input = invHandler.getStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot]).copy();
         if (input.is(ModTags.Forge.COMBS) && !recipe.ingredient.test(input)) {
             ItemStack singleComb;
@@ -448,18 +452,18 @@ public class TieredCentrifugeBlockEntity extends CapabilityBlockEntity implement
             }
             invHandler.setStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot], singleComb);
             for (int i = 0; i < 4; i++) {
-                completeRecipeProcessing2(recipe, invHandler, random);
+                completeRecipeProcessing2(recipe, invHandler, random, stripWax);
             }
             input.shrink(1);
             invHandler.setStackInSlot(InventoryHandlerHelper.INPUT_SLOT[currentSlot], input);
         } else {
-            completeRecipeProcessing2(recipe, invHandler, random);
+            completeRecipeProcessing2(recipe, invHandler, random, stripWax);
         }
     }
 
-    protected void completeRecipeProcessing2(CentrifugeRecipe recipe, IItemHandlerModifiable invHandler, RandomSource random) {
+    protected void completeRecipeProcessing2(CentrifugeRecipe recipe, IItemHandlerModifiable invHandler, RandomSource random, boolean stripWax) {
         recipe.getRecipeOutputs().forEach((itemStack, recipeValues) -> {
-            if (random.nextInt(100) <= recipeValues.get(2).getAsInt()) {
+            if ((!stripWax || !itemStack.is(ModTags.Forge.WAX)) && random.nextInt(100) <= recipeValues.get(2).getAsInt()) {
                 int count = Mth.nextInt(random, Mth.floor(recipeValues.get(0).getAsInt()), Mth.floor(recipeValues.get(1).getAsInt()));
                 count *= tier.getOutputMultiplier();
                 ItemStack output = itemStack.copy();

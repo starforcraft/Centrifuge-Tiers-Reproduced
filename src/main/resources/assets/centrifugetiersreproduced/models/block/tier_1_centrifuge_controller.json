@@ -1,0 +1,10 @@
+{
+    "parent": "block/orientable_with_bottom",
+    "textures": {
+        "particle": "block/iron_block",
+        "bottom": "centrifugetiersreproduced:block/tier_1_centrifuge_casing",
+        "top": "centrifugetiersreproduced:block/tier_1_centrifuge_casing",
+        "front": "centrifugetiersreproduced:block/tier_1_centrifuge_controller",
+        "side": "centrifugetiersreproduced:block/tier_1_centrifuge_casing"
+    }
+}

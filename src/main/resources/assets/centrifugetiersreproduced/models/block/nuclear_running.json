@@ -1,6 +1,0 @@
-{
-    "parent": "centrifugetiersreproduced:block/nuclear_idle",
-    "textures": {
-        "side": "centrifugetiersreproduced:block/nuclear_powered_side"
-    }
-}

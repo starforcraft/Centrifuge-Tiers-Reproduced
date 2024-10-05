@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "centrifugetiersreproduced:block/tier_3_centrifuge_casing"
+    }
+}

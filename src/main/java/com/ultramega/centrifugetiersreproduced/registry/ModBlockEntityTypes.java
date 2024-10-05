@@ -1,25 +1,40 @@
 package com.ultramega.centrifugetiersreproduced.registry;
 
+import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
-import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeBlockEntity;
+import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeCasingBlockEntity;
+import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeControllerBlockEntity;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModBlockEntityTypes {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CentrifugeTiersReproduced.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, CentrifugeTiersReproduced.MODID);
 
-    public static final RegistryObject<BlockEntityType<?>> HIGH_END_CENTRIFUGE = BLOCK_ENTITY_TYPES.register("high_end_centrifuge", () -> BlockEntityType.Builder
-            .of((pos, state) -> new TieredCentrifugeBlockEntity(ModBlockEntityTypes.HIGH_END_CENTRIFUGE.get(), pos, state), ModBlocks.HIGH_END_CENTRIFUGE.get())
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeControllerBlockEntity>> TIER_1_CENTRIFUGE_CONTROLLER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_1_centrifuge_controller", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeControllerBlockEntity(CentrifugeTiers.TIER_1, blockPos, blockState), ModBlocks.TIER_1_CENTRIFUGE_CONTROLLER.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<?>> NUCLEAR_CENTRIFUGE = BLOCK_ENTITY_TYPES.register("nuclear_centrifuge", () -> BlockEntityType.Builder
-            .of((pos, state) -> new TieredCentrifugeBlockEntity(ModBlockEntityTypes.NUCLEAR_CENTRIFUGE.get(), pos, state), ModBlocks.NUCLEAR_CENTRIFUGE.get())
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeControllerBlockEntity>> TIER_2_CENTRIFUGE_CONTROLLER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_2_centrifuge_controller", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeControllerBlockEntity(CentrifugeTiers.TIER_2, blockPos, blockState), ModBlocks.TIER_2_CENTRIFUGE_CONTROLLER.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<?>> COSMIC_CENTRIFUGE = BLOCK_ENTITY_TYPES.register("cosmic_centrifuge", () -> BlockEntityType.Builder
-            .of((pos, state) -> new TieredCentrifugeBlockEntity(ModBlockEntityTypes.COSMIC_CENTRIFUGE.get(), pos, state), ModBlocks.COSMIC_CENTRIFUGE.get())
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeControllerBlockEntity>> TIER_3_CENTRIFUGE_CONTROLLER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_3_centrifuge_controller", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeControllerBlockEntity(CentrifugeTiers.TIER_3, blockPos, blockState), ModBlocks.TIER_3_CENTRIFUGE_CONTROLLER.get())
             .build(null));
-    public static final RegistryObject<BlockEntityType<?>> CREATIVE_CENTRIFUGE = BLOCK_ENTITY_TYPES.register("creative_centrifuge", () -> BlockEntityType.Builder
-            .of((pos, state) -> new TieredCentrifugeBlockEntity(ModBlockEntityTypes.CREATIVE_CENTRIFUGE.get(), pos, state), ModBlocks.CREATIVE_CENTRIFUGE.get())
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeControllerBlockEntity>> TIER_4_CENTRIFUGE_CONTROLLER_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_4_centrifuge_controller", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeControllerBlockEntity(CentrifugeTiers.TIER_4, blockPos, blockState), ModBlocks.TIER_4_CENTRIFUGE_CONTROLLER.get())
+            .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeCasingBlockEntity>> TIER_1_CENTRIFUGE_CASING_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_1_centrifuge_casing", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeCasingBlockEntity(CentrifugeTiers.TIER_1, blockPos, blockState), ModBlocks.TIER_1_CENTRIFUGE_CASING.get())
+            .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeCasingBlockEntity>> TIER_2_CENTRIFUGE_CASING_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_2_centrifuge_casing", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeCasingBlockEntity(CentrifugeTiers.TIER_2, blockPos, blockState), ModBlocks.TIER_2_CENTRIFUGE_CASING.get())
+            .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeCasingBlockEntity>> TIER_3_CENTRIFUGE_CASING_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_3_centrifuge_casing", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeCasingBlockEntity(CentrifugeTiers.TIER_3, blockPos, blockState), ModBlocks.TIER_3_CENTRIFUGE_CASING.get())
+            .build(null));
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TieredCentrifugeCasingBlockEntity>> TIER_4_CENTRIFUGE_CASING_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register("tier_4_centrifuge_casing", () -> BlockEntityType.Builder
+            .of((blockPos, blockState) -> new TieredCentrifugeCasingBlockEntity(CentrifugeTiers.TIER_4, blockPos, blockState), ModBlocks.TIER_4_CENTRIFUGE_CASING.get())
             .build(null));
 }

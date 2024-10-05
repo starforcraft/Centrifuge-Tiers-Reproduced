@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "centrifugetiersreproduced:tier_1_centrifuge_controller",
+    "centrifugetiersreproduced:tier_1_centrifuge_casing",
+    "centrifugetiersreproduced:tier_2_centrifuge_controller",
+    "centrifugetiersreproduced:tier_2_centrifuge_casing",
+    "centrifugetiersreproduced:tier_3_centrifuge_controller",
+    "centrifugetiersreproduced:tier_3_centrifuge_casing",
+    "centrifugetiersreproduced:tier_4_centrifuge_controller",
+    "centrifugetiersreproduced:tier_4_centrifuge_casing"
+  ]
+}

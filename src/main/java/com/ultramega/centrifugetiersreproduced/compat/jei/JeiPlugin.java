@@ -8,6 +8,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import static cy.jdkdigital.productivebees.compat.jei.ProductiveBeesJeiPlugin.CENTRIFUGE_TYPE;
 
@@ -15,15 +16,15 @@ import static cy.jdkdigital.productivebees.compat.jei.ProductiveBeesJeiPlugin.CE
 public class JeiPlugin implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(CentrifugeTiersReproduced.MOD_ID, CentrifugeTiersReproduced.MOD_ID);
+        return ResourceLocation.fromNamespaceAndPath(CentrifugeTiersReproduced.MODID, CentrifugeTiersReproduced.MODID);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.HIGH_END_CENTRIFUGE.get()), CENTRIFUGE_TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.NUCLEAR_CENTRIFUGE.get()), CENTRIFUGE_TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.COSMIC_CENTRIFUGE.get()), CENTRIFUGE_TYPE);
-        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CREATIVE_CENTRIFUGE.get()), CENTRIFUGE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TIER_1_CENTRIFUGE_CONTROLLER.get()), CENTRIFUGE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TIER_2_CENTRIFUGE_CONTROLLER.get()), CENTRIFUGE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TIER_3_CENTRIFUGE_CONTROLLER.get()), CENTRIFUGE_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.TIER_4_CENTRIFUGE_CONTROLLER.get()), CENTRIFUGE_TYPE);
     }
 
     @Override

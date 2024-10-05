@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "RER",
+    " R "
+  ],
+  "key": {
+    "R": { "item": "allthecompressed:diamond_block_3x" },
+    "E": { "item": "centrifugetiersreproduced:tier_2_centrifuge_controller" }
+  },
+  "result": {
+    "id": "centrifugetiersreproduced:tier_3_centrifuge_controller"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "allthecompressed"
+    }
+  ]
+}

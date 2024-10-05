@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "RER",
+    " R "
+  ],
+  "key": {
+    "R": { "item": "allthecompressed:gold_block_2x" },
+    "E": { "item": "centrifugetiersreproduced:tier_1_centrifuge_casing" }
+  },
+  "result": {
+    "id": "centrifugetiersreproduced:tier_2_centrifuge_casing"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "allthecompressed"
+    }
+  ]
+}

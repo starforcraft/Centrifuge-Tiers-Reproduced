@@ -1,0 +1,10 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type":"CTM",
+        "layer":"SOLID",
+        "textures":[
+            "centrifugetiersreproduced:block/tier_1_ctm_centrifuge_casing"
+        ]
+    }
+}

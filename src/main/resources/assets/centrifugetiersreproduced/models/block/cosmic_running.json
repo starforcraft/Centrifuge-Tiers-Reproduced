@@ -1,6 +1,0 @@
-{
-    "parent": "centrifugetiersreproduced:block/cosmic_idle",
-    "textures": {
-        "side": "centrifugetiersreproduced:block/cosmic_powered_side"
-    }
-}

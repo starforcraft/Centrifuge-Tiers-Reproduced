@@ -122,10 +122,10 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
                 }
 
                 boolean isProcessableItem =
-                        ItemStack.isSameItemSameComponents(currentStack, item) ||
+                                ItemStack.isSameItemSameComponents(currentStack, item) ||
                                 item.getItem().equals(ModItems.GENE_BOTTLE.get()) ||
                                 item.getItem().equals(ModItems.HONEY_TREAT.get()) ||
-                                TieredCentrifugeControllerBlockEntity.this.canProcessItemStack(item, (slot - 1) % (1 + tier.getInputSlotAmountIncrease()));
+                                TieredCentrifugeControllerBlockEntity.this.canProcessItemStack(item);
 
                 return (isProcessableItem && isInputSlots(slot)) || (!isProcessableItem && !super.isInputSlot(slot));
             }
@@ -158,16 +158,18 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
         }
 
         if (blockEntity.inventoryHandler instanceof TierInventoryHandlerHelper.BlockEntityItemStackHandler itemStackHandler) {
-            for (int i = 0; i < TierInventoryHandlerHelper.getInputSlotsForTier(blockEntity.tier).length; i++) {
-                if (!itemStackHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(blockEntity.tier)[i]).isEmpty() && blockEntity.canOperate()) {
+            int[] inputSlots = TierInventoryHandlerHelper.getInputSlotsForTier(blockEntity.tier);
+            for (int i = 0; i < inputSlots.length; i++) {
+                int inputSlot = inputSlots[i];
+                if (!itemStackHandler.getStackInSlot(inputSlot).isEmpty() && blockEntity.canOperate()) {
                     // Process gene bottles
-                    ItemStack invItem = itemStackHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(blockEntity.tier)[i]);
+                    ItemStack invItem = itemStackHandler.getStackInSlot(inputSlot);
                     if (invItem.getItem().equals(ModItems.GENE_BOTTLE.get())) {
                         blockEntity.running[i] = true;
                         int totalTime = blockEntity.getProcessingTime(null);
 
                         if (++blockEntity.recipeProgress[i] >= totalTime) {
-                            blockEntity.completeGeneProcessing(itemStackHandler, level.random, i);
+                            blockEntity.completeGeneProcessing(itemStackHandler, level.random, inputSlot);
                             blockEntity.recipeProgress[i] = 0;
                             blockEntity.setChanged();
                         }
@@ -176,7 +178,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
                         int totalTime = blockEntity.getProcessingTime(null);
 
                         if (++blockEntity.recipeProgress[i] >= totalTime) {
-                            blockEntity.completeTreatProcessing(itemStackHandler, i);
+                            blockEntity.completeTreatProcessing(itemStackHandler, inputSlot);
                             blockEntity.recipeProgress[i] = 0;
                             blockEntity.setChanged();
                         }
@@ -187,7 +189,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
                             int totalTime = blockEntity.getProcessingTime(recipe);
 
                             if (++blockEntity.recipeProgress[i] >= totalTime) {
-                                blockEntity.completeRecipeProcessing(recipe, itemStackHandler, level.random, i);
+                                blockEntity.completeRecipeProcessing(recipe, itemStackHandler, level.random, inputSlot);
                                 blockEntity.recipeProgress[i] = 0;
                                 blockEntity.setChanged();
                             }
@@ -259,20 +261,20 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
         return upgradeHandler;
     }
 
-    public boolean canProcessItemStack(ItemStack stack, int inputSlot) {
-        var directProcess = canProcessItemStack2(stack, inputSlot);
+    public boolean canProcessItemStack(ItemStack stack) {
+        var directProcess = canProcessItemStack2(stack);
 
         if (stack.is(ModTags.Common.STORAGE_BLOCK_HONEYCOMBS) && !directProcess) {
-            ItemStack singleComb = getSingleComb(stack);
-            return !singleComb.isEmpty() && canProcessItemStack2(singleComb, inputSlot);
+            ItemStack singleComb = getSingleComb(stack, 1);
+            return !singleComb.isEmpty() && canProcessItemStack2(singleComb);
         }
 
         return directProcess;
     }
 
-    public boolean canProcessItemStack2(ItemStack stack, int inputSlot) {
-        var inv = new TierInventoryHandlerHelper.BlockEntityItemStackHandler(tier, 2 + tier.getInputSlotAmountIncrease(), null);
-        inv.setStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot], stack);
+    public boolean canProcessItemStack2(ItemStack stack) {
+        var inv = new InventoryHandlerHelper.BlockEntityItemStackHandler(2, null);
+        inv.setStackInSlot(1, stack);
 
         boolean isAllowedByFilter = true;
         List<ItemStack> olfFilterUpgrades = this.getInstalledUpgrades(ModItems.UPGRADE_FILTER.get());
@@ -311,38 +313,39 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
             }
         }
 
-        RecipeHolder<CentrifugeRecipe> recipe = this.getRecipe(inv, inputSlot);
+        RecipeHolder<CentrifugeRecipe> recipe = this.getRecipe(inv, -1);
 
         return isAllowedByFilter && recipe != null;
     }
 
     static Map<String, RecipeHolder<CentrifugeRecipe>> blockRecipeMap = new HashMap<>();
-    protected RecipeHolder<CentrifugeRecipe> getRecipe(TierInventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, int inputSlot) {
+    protected RecipeHolder<CentrifugeRecipe> getRecipe(InventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, int inputSlot) {
         if (blockRecipeMap.size() > 5000) {
             blockRecipeMap.clear();
         }
-        ItemStack input = inputHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
+        ItemStack input = inputHandler.getStackInSlot(inputSlot == -1 ? 1 : TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
         String cacheKey = BuiltInRegistries.ITEM.getKey(input.getItem()).toString() + (!input.getComponents().isEmpty() ? input.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
 
-        var directRecipe = getRecipe2(inputHandler, inputSlot);
+        var directRecipe = getRecipe2(inputHandler, input);
         if (input.is(ModTags.Common.STORAGE_BLOCK_HONEYCOMBS) && directRecipe == null) {
-            if (!blockRecipeMap.containsKey(cacheKey)) {
-                ItemStack singleComb = getSingleComb(input);
-                var inv = new TierInventoryHandlerHelper.BlockEntityItemStackHandler(tier, 2 + tier.getInputSlotAmountIncrease());
+            RecipeHolder<CentrifugeRecipe> result = blockRecipeMap.getOrDefault(cacheKey, null);
+            if (result == null) {
+                ItemStack singleComb = getSingleComb(input, 1);
+                var inv = new InventoryHandlerHelper.BlockEntityItemStackHandler(2);
                 // Look up recipe for the single comb that makes up the input comb block
-                inv.setStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot], singleComb);
-                blockRecipeMap.put(cacheKey, getRecipe2(inv, inputSlot));
+                inv.setStackInSlot(1, singleComb);
+                result = blockRecipeMap.put(cacheKey, getRecipe2(inv, singleComb));
             }
-            return blockRecipeMap.get(cacheKey);
+            return result;
         }
         return directRecipe;
     }
 
-    private ItemStack getSingleComb(ItemStack input) {
+    private ItemStack getSingleComb(ItemStack input, int count) {
         ItemStack singleComb;
         // config honeycomb
         if (input.getItem() instanceof CombBlockItem) {
-            singleComb = new ItemStack(ModItems.CONFIGURABLE_HONEYCOMB.get());
+            singleComb = new ItemStack(ModItems.CONFIGURABLE_HONEYCOMB.get(), count);
             singleComb.set(cy.jdkdigital.productivebees.init.ModDataComponents.BEE_TYPE, input.get(cy.jdkdigital.productivebees.init.ModDataComponents.BEE_TYPE));
         } else {
             singleComb = BeeHelper.getRecipeOutputFromInput(level, input.getItem());
@@ -352,21 +355,21 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
     }
 
     static Map<String, RecipeHolder<CentrifugeRecipe>> recipeMap = new HashMap<>();
-    protected RecipeHolder<CentrifugeRecipe> getRecipe2(TierInventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, int inputSlot) {
+    protected RecipeHolder<CentrifugeRecipe> getRecipe2(InventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, ItemStack input) {
         if (recipeMap.size() > 5000) {
             recipeMap.clear();
         }
-        ItemStack input = inputHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
         if (input.isEmpty() || level == null) {
             return null;
         }
 
         String cacheKey = BuiltInRegistries.ITEM.getKey(input.getItem()).toString() + (!input.getComponents().isEmpty() ? input.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
-        if (!recipeMap.containsKey(cacheKey)) {
-            recipeMap.put(cacheKey, BeeHelper.getCentrifugeRecipe(level, inputHandler));
+        RecipeHolder<CentrifugeRecipe> result = recipeMap.getOrDefault(cacheKey, null);
+        if (result == null) {
+            result = recipeMap.put(cacheKey, BeeHelper.getCentrifugeRecipe(level, inputHandler));
         }
 
-        return recipeMap.getOrDefault(cacheKey, null);
+        return result;
     }
 
     protected boolean canProcessRecipe(@Nullable RecipeHolder<CentrifugeRecipe> recipe, IItemHandlerModifiable invHandler) {
@@ -376,8 +379,10 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
 
             recipe.value().getRecipeOutputs().forEach((stack, value) -> {
                 // Check for item with max possible output
-                ItemStack item = new ItemStack(stack.getItem(), value.max());
-                outputList.add(item);
+                if (stack.getItem() != ModItems.WAX.get()) {
+                    ItemStack item = new ItemStack(stack.getItem(), value.max() * tier.getOutputMultiplier());
+                    outputList.add(item);
+                }
             });
 
             // Allow overfilling of fluid but don't process if the tank has a different fluid
@@ -393,15 +398,15 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
     }
 
     protected void completeRecipeProcessing(RecipeHolder<CentrifugeRecipe> recipe, IItemHandlerModifiable invHandler, RandomSource random, int inputSlot) {
-        ItemStack input = invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]).copy();
+        ItemStack input = invHandler.getStackInSlot(inputSlot).copy();
         if (input.is(ModTags.Common.STORAGE_BLOCK_HONEYCOMBS) && !recipe.value().ingredient.test(input)) {
-            ItemStack singleComb = getSingleComb(input);
-            invHandler.setStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot], singleComb);
+            ItemStack singleComb = getSingleComb(input, 4);
+            invHandler.setStackInSlot(inputSlot, singleComb);
             for (int i = 0; i < 4; i++) {
                 completeRecipeProcessing(recipe, invHandler, random, true, inputSlot);
             }
             input.shrink(1);
-            invHandler.setStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot], input);
+            invHandler.setStackInSlot(inputSlot, input);
         } else {
             completeRecipeProcessing(recipe, invHandler, random, true, inputSlot);
         }
@@ -418,7 +423,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
             }
         });
 
-        invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]).shrink(1);
+        invHandler.getStackInSlot(inputSlot).shrink(1);
 
         FluidStack fluidOutput = recipe.value().getFluidOutputs();
         if (!fluidOutput.isEmpty()) {
@@ -427,7 +432,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
     }
 
     private void completeGeneProcessing(IItemHandlerModifiable invHandler, RandomSource random, int inputSlot) {
-        ItemStack geneBottle = invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
+        ItemStack geneBottle = invHandler.getStackInSlot(inputSlot);
 
         List<GeneGroup> entityData = GeneBottle.getGenes(geneBottle);
         if (entityData.isEmpty()) {
@@ -441,11 +446,11 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
             }
         }
 
-        invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]).shrink(1);
+        invHandler.getStackInSlot(inputSlot).shrink(1);
     }
 
     private void completeTreatProcessing(IItemHandlerModifiable invHandler, int inputSlot) {
-        ItemStack honeyTreat = invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
+        ItemStack honeyTreat = invHandler.getStackInSlot(inputSlot);
 
         List<GeneGroup> genes = HoneyTreat.getGenes(honeyTreat);
         if (!genes.isEmpty()) {
@@ -455,7 +460,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
             }
         }
 
-        invHandler.getStackInSlot(TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]).shrink(1);
+        invHandler.getStackInSlot(inputSlot).shrink(1);
     }
 
     @Override

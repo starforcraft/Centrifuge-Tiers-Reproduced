@@ -70,7 +70,7 @@ public class TieredCentrifugeCasingBlockEntity extends AbstractBlockEntity {
 
     public void setControllerPos(BlockPos controllerPos) {
         this.controllerPos = controllerPos;
-        this.level.invalidateCapabilities(getBlockPos());
+        invalidateCapabilities();
     }
 
     public BlockPos getControllerPos() {

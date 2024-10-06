@@ -28,6 +28,6 @@ public class SerializationHelper {
     public static ItemStack decodeLargeItemStack(HolderLookup.Provider provider, CompoundTag tag) {
         if (tag.isEmpty()) return ItemStack.EMPTY;
         return LARGE_CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), tag)
-                .resultOrPartial(string -> System.err.println("Tried to load invalid item: " +  string)).orElse(ItemStack.EMPTY);
+                .resultOrPartial().orElse(ItemStack.EMPTY);
     }
 }

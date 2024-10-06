@@ -2,7 +2,6 @@ package com.ultramega.centrifugetiersreproduced.blockentity;
 
 import com.ultramega.centrifugetiersreproduced.CentrifugeTiers;
 import com.ultramega.centrifugetiersreproduced.utils.SerializationHelper;
-import cy.jdkdigital.productivebees.init.ModItems;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -49,12 +48,9 @@ public class TierInventoryHandlerHelper {
                 continue;
             }
             ItemStack stack = handler.getStackInSlot(slot);
-            System.out.println(stack.getCount());
-            System.out.println(stack.getCount() + (insertStack.getCount() * tier.getOutputMultiplier()));
-            System.out.println((stack.getCount() + (insertStack.getCount() * tier.getOutputMultiplier())) <= tier.getItemMaxStackSize());
             if (stack.isEmpty() && emptySlot == 0) {
                 emptySlot = slot;
-            } else if (stack.getItem().equals(insertStack.getItem()) && (stack.getCount() + (insertStack.getCount() * tier.getOutputMultiplier())) <= tier.getItemMaxStackSize()) {
+            } else if (stack.getItem().equals(insertStack.getItem()) && (stack.getCount() + insertStack.getCount()) <= tier.getItemMaxStackSize()) {
                 if (stack.isEmpty() || areItemsAndTagsEqual(stack, insertStack)) {
                     return slot;
                 }
@@ -84,22 +80,10 @@ public class TierInventoryHandlerHelper {
         protected BlockEntity blockEntity;
         private final CentrifugeTiers tier;
 
-        public BlockEntityItemStackHandler(CentrifugeTiers tier, int size) {
-            this(tier, size, null);
-        }
-
         public BlockEntityItemStackHandler(CentrifugeTiers tier, int size, @Nullable BlockEntity blockEntity) {
             super(size);
             this.blockEntity = blockEntity;
             this.tier = tier;
-        }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            super.onContentsChanged(slot);
-            if (blockEntity != null) {
-                blockEntity.setChanged();
-            }
         }
 
         @Override
@@ -205,7 +189,7 @@ public class TierInventoryHandlerHelper {
 
         @Override
         protected int getStackLimit(int slot, ItemStack stack) {
-            return tier.getItemMaxStackSize();
+            return !isInputSlot(slot) ? tier.getItemMaxStackSize() : stack.getMaxStackSize();
         }
 
         @Override

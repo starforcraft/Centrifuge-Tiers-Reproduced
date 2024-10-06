@@ -73,7 +73,7 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
     protected void renderBg(@Nonnull GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         var GUI = tier == CentrifugeTiers.TIER_1 ? GUI_TEXTURE_TIER_1 : tier == CentrifugeTiers.TIER_4 ? GUI_TEXTURE_TIER_4 : GUI_TEXTURE_TIER_2_AND_3;
         int height = 52 + getTierHeight();
-        int minusHeight =  getTierHeight() / 2;
+        int minusHeight = getTierHeight() / 2;
 
         // Draw main screen
         guiGraphics.blit(GUI, this.getGuiLeft() - 13, this.getGuiTop() - minusHeight, 0, 0, this.getXSize() + 26, this.getYSize() + getTierHeight());
@@ -98,7 +98,11 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
         }
     }
 
-    private int getTierHeight() {
+    public int getTierHeight() {
         return (tier == CentrifugeTiers.TIER_2 || tier == CentrifugeTiers.TIER_3 ? 18 : tier == CentrifugeTiers.TIER_4 ? 54 : 0);
+    }
+
+    public CentrifugeTiers getTier() {
+        return tier;
     }
 }

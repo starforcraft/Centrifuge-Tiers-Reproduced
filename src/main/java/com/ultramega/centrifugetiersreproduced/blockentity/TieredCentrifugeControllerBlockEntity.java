@@ -324,21 +324,42 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
             blockRecipeMap.clear();
         }
         ItemStack input = inputHandler.getStackInSlot(inputSlot == -1 ? 1 : TierInventoryHandlerHelper.getInputSlotsForTier(tier)[inputSlot]);
-        String cacheKey = BuiltInRegistries.ITEM.getKey(input.getItem()).toString() + (!input.getComponents().isEmpty() ? input.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
+        String cacheKey = getCacheKey(input);
 
-        var directRecipe = getRecipe2(inputHandler, input);
-        if (input.is(ModTags.Common.STORAGE_BLOCK_HONEYCOMBS) && directRecipe == null) {
+        if (!input.is(ModTags.Common.STORAGE_BLOCK_HONEYCOMBS)) {
+            return getRecipe2(inputHandler, cacheKey);
+        } else {
             RecipeHolder<CentrifugeRecipe> result = blockRecipeMap.getOrDefault(cacheKey, null);
             if (result == null) {
                 ItemStack singleComb = getSingleComb(input, 1);
                 var inv = new InventoryHandlerHelper.BlockEntityItemStackHandler(2);
                 // Look up recipe for the single comb that makes up the input comb block
                 inv.setStackInSlot(1, singleComb);
-                result = blockRecipeMap.put(cacheKey, getRecipe2(inv, singleComb));
+                result = blockRecipeMap.put(cacheKey, getRecipe2(inv, getCacheKey(singleComb)));
             }
             return result;
         }
-        return directRecipe;
+    }
+
+    static Map<String, RecipeHolder<CentrifugeRecipe>> combRecipeMap = new HashMap<>();
+    protected RecipeHolder<CentrifugeRecipe> getRecipe2(InventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, String cacheKey) {
+        if (combRecipeMap.size() > 5000) {
+            combRecipeMap.clear();
+        }
+        if (level == null) {
+            return null;
+        }
+
+        RecipeHolder<CentrifugeRecipe> result = combRecipeMap.getOrDefault(cacheKey, null);
+        if (result == null) {
+            result = combRecipeMap.put(cacheKey, BeeHelper.getCentrifugeRecipe(level, inputHandler));
+        }
+
+        return result;
+    }
+
+    private String getCacheKey(ItemStack input) {
+        return BuiltInRegistries.ITEM.getKey(input.getItem()).toString() + (!input.getComponents().isEmpty() ? input.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
     }
 
     private ItemStack getSingleComb(ItemStack input, int count) {
@@ -352,24 +373,6 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
         }
 
         return singleComb;
-    }
-
-    static Map<String, RecipeHolder<CentrifugeRecipe>> recipeMap = new HashMap<>();
-    protected RecipeHolder<CentrifugeRecipe> getRecipe2(InventoryHandlerHelper.BlockEntityItemStackHandler inputHandler, ItemStack input) {
-        if (recipeMap.size() > 5000) {
-            recipeMap.clear();
-        }
-        if (input.isEmpty() || level == null) {
-            return null;
-        }
-
-        String cacheKey = BuiltInRegistries.ITEM.getKey(input.getItem()).toString() + (!input.getComponents().isEmpty() ? input.getComponents().stream().map(TypedDataComponent::toString).reduce((s, s2) -> s + s2) : "");
-        RecipeHolder<CentrifugeRecipe> result = recipeMap.getOrDefault(cacheKey, null);
-        if (result == null) {
-            result = recipeMap.put(cacheKey, BeeHelper.getCentrifugeRecipe(level, inputHandler));
-        }
-
-        return result;
     }
 
     protected boolean canProcessRecipe(@Nullable RecipeHolder<CentrifugeRecipe> recipe, IItemHandlerModifiable invHandler) {

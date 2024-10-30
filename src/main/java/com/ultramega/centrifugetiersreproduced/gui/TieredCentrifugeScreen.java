@@ -80,8 +80,12 @@ public class TieredCentrifugeScreen extends AbstractContainerScreen<TieredCentri
 
         // Draw progress
         for (int i = 0; i < 1 + tier.getInputSlotAmountIncrease(); i++) {
-            int progress = (int) (this.menu.blockEntity.recipeProgress[i] * (24 / (float) this.menu.blockEntity.getProcessingTime(null)));
-            guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 17 - minusHeight + (i * (tier == CentrifugeTiers.TIER_1 ? 36 : 18)), 202, height, progress + 1, 16);
+            if (this.menu.blockEntity.recipeProgress[i] > 0) {
+                int processingTime = this.menu.blockEntity.getProcessingTime(null);
+                int progress = (int) ((processingTime - this.menu.blockEntity.recipeProgress[i]) * (24 / (float) processingTime));
+
+                guiGraphics.blit(GUI, this.getGuiLeft() + 35, this.getGuiTop() + 17 - minusHeight + (i * (tier == CentrifugeTiers.TIER_1 ? 36 : 18)), 202, height, progress + 1, 16);
+            }
         }
 
         // Draw energy level

@@ -9,9 +9,11 @@ import com.ultramega.centrifugetiersreproduced.container.TieredCentrifugeContain
 import com.ultramega.centrifugetiersreproduced.utils.MultiBlockHelper;
 import com.ultramega.centrifugetiersreproduced.utils.MultiBlockInfo;
 import cy.jdkdigital.productivebees.ProductiveBeesConfig;
-import cy.jdkdigital.productivebees.common.crafting.ingredient.BeeIngredient;
 import cy.jdkdigital.productivebees.common.crafting.ingredient.BeeIngredientFactory;
-import cy.jdkdigital.productivebees.common.item.*;
+import cy.jdkdigital.productivebees.common.item.CombBlockItem;
+import cy.jdkdigital.productivebees.common.item.Gene;
+import cy.jdkdigital.productivebees.common.item.GeneBottle;
+import cy.jdkdigital.productivebees.common.item.HoneyTreat;
 import cy.jdkdigital.productivebees.common.recipe.CentrifugeRecipe;
 import cy.jdkdigital.productivebees.common.recipe.TimedRecipeInterface;
 import cy.jdkdigital.productivebees.init.ModItems;
@@ -62,7 +64,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity implements MenuProvider, UpgradeableBlockEntity {
     private final CentrifugeTiers tier;
@@ -71,7 +72,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
     protected boolean validStructure;
     protected final List<BlockPos> structureBlocks = new ArrayList<>();
 
-    private boolean[] running = new boolean[] { false, false, false, false, false, false};
+    private final boolean[] running = new boolean[] { false, false, false, false, false, false };
     public int[] recipeProgress = new int[] { 0, 0, 0, 0, 0, 0 };
     public int fluidId = 0;
 
@@ -81,6 +82,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
 
     protected IItemHandlerModifiable upgradeHandler = new InventoryHandlerHelper.UpgradeHandler(4, this, List.of(
             LibItems.UPGRADE_TIME.get(),
+            LibItems.UPGRADE_TIME_2.get(),
             LibItems.UPGRADE_ENTITY_FILTER.get()
     ));
 
@@ -239,13 +241,13 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
     }
 
     protected double getProcessingTimeModifier() {
-        double timeUpgradeModifier = 1 - (ProductiveBeesConfig.UPGRADES.timeBonus.get() * (getUpgradeCount(ModItems.UPGRADE_TIME.get()) + getUpgradeCount(LibItems.UPGRADE_TIME.get())));
+        double timeUpgradeModifier = 1 - (ProductiveBeesConfig.UPGRADES.timeBonus.get() * (getUpgradeCount(LibItems.UPGRADE_TIME_2.get()) * 2 + getUpgradeCount(LibItems.UPGRADE_TIME.get())));
 
         return Math.max(0, timeUpgradeModifier) / 9 / tier.getSpeed();
     }
 
     protected double getEnergyConsumptionModifier() {
-        double timeUpgradeModifier = 1D + (ProductiveBeesConfig.UPGRADES.timeBonus.get() * (getUpgradeCount(ModItems.UPGRADE_TIME.get()) + getUpgradeCount(LibItems.UPGRADE_TIME.get())));
+        double timeUpgradeModifier = 1D + (ProductiveBeesConfig.UPGRADES.timeBonus.get() * (getUpgradeCount(LibItems.UPGRADE_TIME_2.get()) * 2 + getUpgradeCount(LibItems.UPGRADE_TIME.get())));
 
         return Math.max(1, timeUpgradeModifier) * 3;
     }
@@ -275,23 +277,7 @@ public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity 
         inv.setStackInSlot(1, stack);
 
         boolean isAllowedByFilter = true;
-        List<ItemStack> olfFilterUpgrades = this.getInstalledUpgrades(ModItems.UPGRADE_FILTER.get());
         List<ItemStack> filterUpgrades = getInstalledUpgrades(LibItems.UPGRADE_ENTITY_FILTER.get());
-        if (!olfFilterUpgrades.isEmpty()) {
-            isAllowedByFilter = false;
-            for (ItemStack filter : olfFilterUpgrades) {
-                List<Supplier<BeeIngredient>> allowedBees = FilterUpgradeItem.getAllowedBees(filter);
-                for (Supplier<BeeIngredient> allowedBee : allowedBees) {
-                    List<ItemStack> produceList = BeeHelper.getBeeProduce(level, (Bee) allowedBee.get().getCachedEntity(level), false, 1.0);
-                    for (ItemStack pStack: produceList) {
-                        if (pStack.getItem().equals(stack.getItem())) {
-                            isAllowedByFilter = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
         if (!filterUpgrades.isEmpty()) {
             isAllowedByFilter = false;
             for (ItemStack filter : filterUpgrades) {

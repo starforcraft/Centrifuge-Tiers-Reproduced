@@ -93,7 +93,7 @@ configurations {
 dependencies {
     implementation "local.libs:productivelib-${prod_lib_version}"
 
-    implementation "curse.maven:productive-bees-377897:5857481"
+    implementation "curse.maven:productive-bees-377897:5878141"
     implementation "local.libs:allthecompressed-${atc_lib_version}"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"

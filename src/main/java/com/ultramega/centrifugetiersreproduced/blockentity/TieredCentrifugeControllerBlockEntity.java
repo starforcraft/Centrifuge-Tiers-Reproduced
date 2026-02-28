@@ -22,7 +22,7 @@ import cy.jdkdigital.productivebees.util.BeeHelper;
 import cy.jdkdigital.productivebees.util.GeneGroup;
 import cy.jdkdigital.productivelib.common.block.entity.FluidTankBlockEntity;
 import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
-import cy.jdkdigital.productivelib.common.block.entity.UpgradeableBlockEntity;
+import cy.jdkdigital.productivelib.common.block.entity.IUpgradeableBlockEntity;
 import cy.jdkdigital.productivelib.registry.LibItems;
 import cy.jdkdigital.productivelib.registry.ModDataComponents;
 import net.minecraft.core.BlockPos;
@@ -65,7 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity implements MenuProvider, UpgradeableBlockEntity {
+public class TieredCentrifugeControllerBlockEntity extends FluidTankBlockEntity implements MenuProvider, IUpgradeableBlockEntity {
     private final CentrifugeTiers tier;
 
     protected int validateTime = 15;

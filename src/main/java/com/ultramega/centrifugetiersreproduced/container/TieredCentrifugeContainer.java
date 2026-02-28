@@ -5,9 +5,7 @@ import com.ultramega.centrifugetiersreproduced.CentrifugeTiersReproduced;
 import com.ultramega.centrifugetiersreproduced.blockentity.TierInventoryHandlerHelper;
 import com.ultramega.centrifugetiersreproduced.blockentity.TieredCentrifugeControllerBlockEntity;
 import com.ultramega.centrifugetiersreproduced.blocks.TieredCentrifugeControllerBlock;
-import cy.jdkdigital.productivelib.common.block.entity.InventoryHandlerHelper;
 import cy.jdkdigital.productivelib.container.AbstractContainer;
-import cy.jdkdigital.productivelib.container.ManualSlotItemHandler;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,14 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class TieredCentrifugeContainer extends AbstractContainer {
+public class TieredCentrifugeContainer extends AbstractContainer<TieredCentrifugeControllerBlockEntity> {
     private final CentrifugeTiers tier;
     public final TieredCentrifugeControllerBlockEntity blockEntity;
 
@@ -33,7 +30,7 @@ public class TieredCentrifugeContainer extends AbstractContainer {
     }
 
     public TieredCentrifugeContainer(CentrifugeTiers tier, final int windowId, final Inventory playerInventory, final TieredCentrifugeControllerBlockEntity blockEntity) {
-        super(CentrifugeTiersReproduced.getMenuType(tier), windowId);
+        super(CentrifugeTiersReproduced.getMenuType(tier), blockEntity, windowId);
         this.tier = tier;
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
@@ -118,7 +115,7 @@ public class TieredCentrifugeContainer extends AbstractContainer {
     private static TieredCentrifugeControllerBlockEntity getBlockEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
         Objects.requireNonNull(playerInventory, "playerInventory cannot be null!");
         Objects.requireNonNull(data, "data cannot be null!");
-        final BlockEntity tileAtPos = playerInventory.player.level().getBlockEntity(data.readBlockPos());
+        final var tileAtPos = playerInventory.player.level().getBlockEntity(data.readBlockPos());
         if (tileAtPos instanceof TieredCentrifugeControllerBlockEntity) {
             return (TieredCentrifugeControllerBlockEntity) tileAtPos;
         }
@@ -128,11 +125,6 @@ public class TieredCentrifugeContainer extends AbstractContainer {
     @Override
     public boolean stillValid(@Nonnull final Player player) {
         return canInteractWithCallable.evaluate((world, pos) -> world.getBlockState(pos).getBlock() instanceof TieredCentrifugeControllerBlock && player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D) <= 64.0D, true);
-    }
-
-    @Override
-    protected BlockEntity getBlockEntity() {
-        return blockEntity;
     }
 
     private int getTierHeight() {
